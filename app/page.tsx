@@ -493,16 +493,7 @@ const Portfolio = () => {
                     whileHover={{ scale: 1.02 }}
                     className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg"
                   >
-                    {/* <motion.div variants={itemVariants} className="mt-16">
-                <h3 className="text-3xl font-bold mb-8 text-center">
-                  Experience
-                </h3>
-                {experience.map((exp, idx) => (
-                  <motion.div
-                    key={idx}
-                    whileHover={{ scale: 1.02 }}
-                    className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg"
-                  > */}
+                   
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                       <div>
                         <h4 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
