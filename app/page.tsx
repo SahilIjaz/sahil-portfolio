@@ -103,15 +103,27 @@ const experience = [
     company: "Bridge Zone",
     role: "Backend Developer",
     location: "Lahore, Pakistan",
-    period: "July 2024 – Present",
-    description: "Mobile app development company specializing in scalable digital solutions",
+    period: "July 2024 – October 2025",
+    description:
+      "Mobile app development company specializing in scalable digital solutions",
     highlights: [
       "Engineered and maintained over 5 real-time backend services",
       "Designed scalable architectures using Node.js and Express",
       "Integrated Socket.IO, Stripe, and Agora services",
-      "Deployed applications on AWS EC2 and managed media via S3"
-    ]
-  }
+      "Deployed applications on AWS EC2 and managed media via S3",
+    ],
+  },
+  {
+    company: "Gama Developers",
+    role: "Full-Stack Developer",
+    location: "Lahore, Pakistan",
+    period: "October 2024 – present",
+    description:
+      "Software development company specializing in scalable digital solutions",
+    highlights: [
+      "Working on developing full-stack web applications using Next.js and React",
+    ],
+  },
 ];
 
 const Portfolio = () => {
@@ -119,7 +131,6 @@ const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  
   const { scrollYProgress } = useScroll();
   const yBg = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
@@ -320,6 +331,7 @@ const Portfolio = () => {
                 transition={{ delay: 0.8 }}
                 className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               >
+                {/* Hire Me Button */}
                 <motion.a
                   href="#contact"
                   whileHover={{
@@ -332,14 +344,17 @@ const Portfolio = () => {
                   Hire Me
                 </motion.a>
 
-                <motion.button
+                {/* Download Resume Button */}
+                <motion.a
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  href="/sahil-resume.pdf" // points to your resume in public folder
+                  download // triggers download instead of opening
                   className="px-8 py-4 border-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 rounded-full font-semibold flex items-center gap-2"
                 >
                   <Download size={20} />
                   Download Resume
-                </motion.button>
+                </motion.a>
               </motion.div>
 
               <motion.div
@@ -349,9 +364,11 @@ const Portfolio = () => {
                 className="flex gap-6 justify-center mt-12"
               >
                 {[
-                  { Icon: Github, href: "#" },
-                  { Icon: Linkedin, href: "#" },
-                  { Icon: Twitter, href: "#" },
+                  { Icon: Github, href: "https://github.com/SahilIjaz" },
+                  {
+                    Icon: Linkedin,
+                    href: "https://www.linkedin.com/in/sahil-ijaz-a75b15281/",
+                  },
                   { Icon: Mail, href: "#contact" },
                 ].map(({ Icon, href }, idx) => (
                   <motion.a
@@ -466,7 +483,7 @@ const Portfolio = () => {
               </div>
 
               {/* Experience Timeline */}
-              <motion.div variants={itemVariants} className="mt-16">
+              <motion.div variants={itemVariants} className="mt-16 space-y-6">
                 <h3 className="text-3xl font-bold mb-8 text-center">
                   Experience
                 </h3>
@@ -476,6 +493,16 @@ const Portfolio = () => {
                     whileHover={{ scale: 1.02 }}
                     className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg"
                   >
+                    {/* <motion.div variants={itemVariants} className="mt-16">
+                <h3 className="text-3xl font-bold mb-8 text-center">
+                  Experience
+                </h3>
+                {experience.map((exp, idx) => (
+                  <motion.div
+                    key={idx}
+                    whileHover={{ scale: 1.02 }}
+                    className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg"
+                  > */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                       <div>
                         <h4 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
