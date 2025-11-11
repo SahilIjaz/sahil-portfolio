@@ -461,7 +461,7 @@ const Portfolio = () => {
 
                   <p className="text-lg text-gray-700 dark:text-gray-300">
                     Currently working at{" "}
-                    <span className="font-semibold">Bridge Zone</span> in
+                    <span className="font-semibold">Gamma Developers</span> in
                     Lahore, Pakistan, where I engineer and maintain real-time
                     backend services with optimized performance.
                   </p>
@@ -482,7 +482,7 @@ const Portfolio = () => {
                         size={20}
                       />
                       <span className="text-gray-700 dark:text-gray-300">
-                        Bridge Zone - Backend Developer
+                        Gamma Developers - Full-Stack Developer
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
@@ -723,8 +723,46 @@ const Portfolio = () => {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="py-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="contact" className="py-20 relative overflow-hidden">
+          {/* Animated background effects */}
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 180, 360],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute -top-20 -left-20 w-96 h-96 bg-blue-500/20 dark:bg-blue-500/10 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{
+              scale: [1.2, 1, 1.2],
+              rotate: [360, 180, 0],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-500/20 dark:bg-purple-500/10 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{
+              y: [0, 50, 0],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-purple-500/10 dark:from-cyan-500/5 dark:via-blue-500/5 dark:to-purple-500/5 rounded-full blur-3xl"
+          />
+
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -744,8 +782,37 @@ const Portfolio = () => {
               <motion.form
                 variants={itemVariants}
                 onSubmit={handleSubmit}
-                className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg space-y-6"
+                whileHover={{ scale: 1.01 }}
+                className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-2xl space-y-6 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
               >
+                {/* Gradient border glow effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 dark:from-blue-500/10 dark:via-purple-500/10 dark:to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                {/* Animated corner lights */}
+                <motion.div
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/30 to-transparent dark:from-blue-500/20 rounded-full blur-2xl"
+                />
+                <motion.div
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                    scale: [1.2, 1, 1.2],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-purple-500/30 to-transparent dark:from-purple-500/20 rounded-full blur-2xl"
+                />
                 {/* Status Message */}
                 <AnimatePresence>
                   {submitStatus.type && (
@@ -753,7 +820,7 @@ const Portfolio = () => {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className={`p-4 rounded-lg ${
+                      className={`relative z-10 p-4 rounded-lg ${
                         submitStatus.type === 'success'
                           ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 border border-green-300 dark:border-green-700'
                           : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 border border-red-300 dark:border-red-700'
@@ -764,7 +831,7 @@ const Portfolio = () => {
                   )}
                 </AnimatePresence>
 
-                <div>
+                <div className="relative z-10">
                   <label className="block text-sm font-semibold mb-2">
                     Name
                   </label>
@@ -781,7 +848,7 @@ const Portfolio = () => {
                   />
                 </div>
 
-                <div>
+                <div className="relative z-10">
                   <label className="block text-sm font-semibold mb-2">
                     Email
                   </label>
@@ -798,7 +865,7 @@ const Portfolio = () => {
                   />
                 </div>
 
-                <div>
+                <div className="relative z-10">
                   <label className="block text-sm font-semibold mb-2">
                     Message
                   </label>
@@ -820,7 +887,7 @@ const Portfolio = () => {
                   whileTap={!isSubmitting ? { scale: 0.98 } : {}}
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="relative z-10 w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <>
