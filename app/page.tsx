@@ -959,7 +959,7 @@ const Portfolio = () => {
             </div>
 
             <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-              <p>© 2024 Sahil Ijaz. All rights reserved.</p>
+              <p>© 2025 Sahil Ijaz. All rights reserved.</p>
               <p className="mt-2">
                 Built with Next.js, Tailwind CSS & Framer Motion
               </p>
