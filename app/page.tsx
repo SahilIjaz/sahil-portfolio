@@ -166,7 +166,7 @@ const Portfolio = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.5 }
+      transition: { duration: 0.2 }
     }
   };
 
@@ -328,7 +328,8 @@ const Portfolio = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
                 className="flex flex-col sm:flex-row gap-4 justify-center items-center"
               >
                 {/* Hire Me Button */}
@@ -493,7 +494,6 @@ const Portfolio = () => {
                     whileHover={{ scale: 1.02 }}
                     className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg"
                   >
-                   
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                       <div>
                         <h4 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
