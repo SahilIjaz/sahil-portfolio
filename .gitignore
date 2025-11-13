@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# refactor watcher
+refactor-watcher-mcp/node_modules
+refactor-watcher-mcp/build
+*.backup

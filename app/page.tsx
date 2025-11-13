@@ -1,15 +1,58 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useTransition, useMemo, useCallback } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { 
-  Github, Linkedin, Mail, Twitter, ExternalLink, Download, 
+import {
+  Github, Linkedin, Mail, ExternalLink, Download,
   Code2, Database, Cloud, Zap, MessageSquare, Menu, X,
   Sun, Moon, ChevronDown, MapPin, Calendar, Building2
 } from 'lucide-react';
 
+// Type definitions for better type safety (Next.js 16 + React 19)
+interface Project {
+  id: number;
+  name: string;
+  description: string;
+  tech: string[];
+  category: string;
+  gradient: string;
+}
+
+interface Skill {
+  name: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  color: string;
+}
+
+interface Service {
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  gradient: string;
+}
+
+interface Experience {
+  company: string;
+  role: string;
+  location: string;
+  period: string;
+  description: string;
+  highlights: string[];
+}
+
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+interface SubmitStatus {
+  type: 'success' | 'error' | null;
+  message: string;
+}
+
 // Data from CV
-const projectsData = [
+const projectsData: Project[] = [
   {
     id: 1,
     name: "Anaya",
@@ -60,7 +103,7 @@ const projectsData = [
   }
 ];
 
-const skills = [
+const skills: Skill[] = [
   { name: "Node.js", icon: Code2, color: "text-green-500" },
   { name: "Next.js", icon: Code2, color: "text-gray-900 dark:text-white" },
   { name: "React.js", icon: Code2, color: "text-blue-500" },
@@ -71,7 +114,7 @@ const skills = [
   { name: "Socket.io", icon: Zap, color: "text-purple-500" }
 ];
 
-const services = [
+const services: Service[] = [
   {
     title: "Backend Development",
     description: "Building scalable, real-time backend services with Node.js, Express, and Nest.js",
@@ -98,7 +141,7 @@ const services = [
   }
 ];
 
-const experience = [
+const experience: Experience[] = [
   {
     company: "Bridge Zone",
     role: "Backend Developer",
@@ -117,7 +160,7 @@ const experience = [
     company: "Gama Developers",
     role: "Full-Stack Developer",
     location: "Lahore, Pakistan",
-    period: "October 2024 – present",
+    period: "October 2025 – present",
     description:
       "Software development company specializing in scalable digital solutions",
     highlights: [
@@ -130,9 +173,14 @@ const Portfolio = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [activeFilter, setActiveFilter] = useState('All');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState<FormData>({ name: '', email: '', message: '' });
+  const [isPending, startTransition] = useTransition();
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({ type: null, message: '' });
+
+  // Simple state for form submission (React 19 compatible)
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
+  const [submitMessage, setSubmitMessage] = useState('');
+
   const { scrollYProgress } = useScroll();
   const yBg = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
@@ -144,48 +192,77 @@ const Portfolio = () => {
     }
   }, [darkMode]);
 
-  const categories = ['All', ...new Set(projectsData.map(p => p.category))];
-  const filteredProjects = activeFilter === 'All' 
-    ? projectsData 
-    : projectsData.filter(p => p.category === activeFilter);
+  // Memoize expensive computations (React 19 optimization)
+  const categories = useMemo(
+    () => ['All', ...new Set(projectsData.map(p => p.category))],
+    []
+  );
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const filteredProjects = useMemo(
+    () => activeFilter === 'All'
+      ? projectsData
+      : projectsData.filter(p => p.category === activeFilter),
+    [activeFilter]
+  );
+
+  // Memoize callbacks to prevent unnecessary re-renders
+  const toggleDarkMode = useCallback(() => {
+    setDarkMode(prev => !prev);
+  }, []);
+
+  const toggleMobileMenu = useCallback(() => {
+    setMobileMenuOpen(prev => !prev);
+  }, []);
+
+  const handleFilterChange = useCallback((category: string) => {
+    setActiveFilter(category);
+  }, []);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
 
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    // Set loading state with instant UI feedback
+    setIsSubmitting(true);
+    setSubmitMessage('Sending your message...');
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setSubmitStatus({
-          type: 'success',
-          message: 'Thank you for your message! I will get back to you soon.',
+    // Use startTransition for non-urgent updates
+    startTransition(async () => {
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
         });
-        setFormData({ name: '', email: '', message: '' });
-      } else {
+
+        const data = await response.json();
+
+        if (response.ok) {
+          setSubmitStatus({
+            type: 'success',
+            message: 'Thank you for your message! I will get back to you soon.',
+          });
+          setFormData({ name: '', email: '', message: '' });
+        } else {
+          setSubmitStatus({
+            type: 'error',
+            message: data.error || 'Something went wrong. Please try again.',
+          });
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
         setSubmitStatus({
           type: 'error',
-          message: data.error || 'Something went wrong. Please try again.',
+          message: 'Failed to send message. Please try again later.',
         });
+      } finally {
+        setIsSubmitting(false);
+        setSubmitMessage('');
       }
-    } catch (error) {
-      setSubmitStatus({
-        type: 'error',
-        message: 'Failed to send message. Please try again later.',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    });
+  }, [formData]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -240,15 +317,17 @@ const Portfolio = () => {
                 <motion.button
                   whileHover={{ scale: 1.1, rotate: 180 }}
                   whileTap={{ scale: 0.9 }}
-                  onClick={() => setDarkMode(!darkMode)}
-                  className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800"
+                  onClick={toggleDarkMode}
+                  className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+                  aria-label="Toggle dark mode"
                 >
                   {darkMode ? <Sun size={20} /> : <Moon size={20} />}
                 </motion.button>
 
                 <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  onClick={toggleMobileMenu}
                   className="md:hidden p-2"
+                  aria-label="Toggle mobile menu"
                 >
                   {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
@@ -269,8 +348,8 @@ const Portfolio = () => {
                     <a
                       key={item}
                       href={`#${item.toLowerCase()}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block hover:text-blue-600 dark:hover:text-blue-400"
+                      onClick={toggleMobileMenu}
+                      className="block hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                     >
                       {item}
                     </a>
@@ -326,7 +405,7 @@ const Portfolio = () => {
                 transition={{ delay: 0.2 }}
                 className="text-lg sm:text-xl text-blue-600 dark:text-blue-400 mb-4"
               >
-                Hi, I'm
+                Hi, I&apos;m
               </motion.p>
 
               <motion.h1
@@ -355,7 +434,7 @@ const Portfolio = () => {
                 transition={{ delay: 0.6 }}
                 className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto"
               >
-                Next.js & Node.js Specialist | Turning ideas into interactive
+                Next.js &amp; Node.js Specialist | Turning ideas into interactive
                 web experiences
               </motion.p>
 
@@ -596,12 +675,13 @@ const Portfolio = () => {
                     key={category}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => setActiveFilter(category)}
+                    onClick={() => handleFilterChange(category)}
                     className={`px-6 py-2 rounded-full font-semibold transition-all ${
                       activeFilter === category
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white"
-                        : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                        : "bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:shadow-md"
                     }`}
+                    aria-pressed={activeFilter === category}
                   >
                     {category}
                   </motion.button>
@@ -842,8 +922,8 @@ const Portfolio = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting || isPending}
+                    className="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     placeholder="Your name"
                   />
                 </div>
@@ -859,8 +939,8 @@ const Portfolio = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting || isPending}
+                    className="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -876,27 +956,27 @@ const Portfolio = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, message: e.target.value })
                     }
-                    disabled={isSubmitting}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting || isPending}
+                    className="w-full px-4 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                     placeholder="Your message..."
                   />
                 </div>
 
                 <motion.button
-                  whileHover={!isSubmitting ? { scale: 1.02 } : {}}
-                  whileTap={!isSubmitting ? { scale: 0.98 } : {}}
+                  whileHover={!isSubmitting && !isPending ? { scale: 1.02 } : {}}
+                  whileTap={!isSubmitting && !isPending ? { scale: 0.98 } : {}}
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isPending}
                   className="relative z-10 w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {isSubmitting ? (
+                  {isSubmitting || isPending ? (
                     <>
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                         className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                       />
-                      Sending...
+                      {submitMessage || 'Sending...'}
                     </>
                   ) : (
                     'Send Message'

@@ -1,0 +1,25 @@
+{
+  "name": "refactor-watcher-mcp",
+  "version": "1.0.0",
+  "description": "MCP server that watches files for automatic refactoring with Claude Code",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "refactor-watcher-mcp": "build/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "chokidar": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "author": "Sahil Ijaz",
+  "license": "MIT"
+}

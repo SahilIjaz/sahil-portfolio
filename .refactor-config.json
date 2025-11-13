@@ -1,0 +1,67 @@
+{
+  "name": "Sahil Portfolio Refactor Configuration",
+  "version": "1.0.0",
+
+  "watch": {
+    "description": "File watching configuration",
+    "paths": [
+      "app/**/*.{ts,tsx,js,jsx}",
+      "components/**/*.{ts,tsx,js,jsx}",
+      "lib/**/*.{ts,tsx,js,jsx}",
+      "hooks/**/*.{ts,tsx,js,jsx}"
+    ],
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts",
+      "**/*.spec.tsx",
+      "**/node_modules/**",
+      "**/.next/**",
+      "**/.git/**",
+      "**/*.backup"
+    ],
+    "debounceMs": 2000,
+    "stabilityThreshold": 500
+  },
+
+  "refactoring": {
+    "description": "Refactoring behavior settings",
+    "model": "claude-sonnet-4-5-20250929",
+    "maxTokens": 8000,
+    "maxFileLines": 500,
+    "maxConcurrent": 1,
+    "goals": [
+      "improve-readability",
+      "enhance-performance",
+      "add-type-safety",
+      "extract-components",
+      "remove-duplication",
+      "consistent-formatting"
+    ]
+  },
+
+  "safety": {
+    "description": "Safety and loop prevention",
+    "createBackups": true,
+    "backupExtension": ".backup",
+    "preventLoopTimeMs": 30000,
+    "requireGitClean": false,
+    "maxRefactorsPerHour": 10,
+    "skipLargeFiles": true
+  },
+
+  "cost": {
+    "description": "Cost management",
+    "maxDailyCost": 20.0,
+    "warnThreshold": 15.0,
+    "estimatedCostPerRefactor": 0.04,
+    "trackUsage": true
+  },
+
+  "logging": {
+    "description": "Logging configuration",
+    "level": "INFO",
+    "showDebug": false,
+    "statsIntervalMinutes": 5
+  }
+}
