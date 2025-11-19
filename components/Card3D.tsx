@@ -15,11 +15,11 @@ export function Card3D({ children, className = '' }: Card3DProps) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+  const mouseXSpring = useSpring(x, { stiffness: 400, damping: 35 });
+  const mouseYSpring = useSpring(y, { stiffness: 400, damping: 35 });
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7.5deg", "-7.5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7.5deg", "7.5deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
@@ -55,8 +55,8 @@ export function Card3D({ children, className = '' }: Card3DProps) {
         transformStyle: "preserve-3d",
       }}
       className={`relative ${className}`}
-      whileHover={{ scale: 1.05 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 500, damping: 28 }}
     >
       <motion.div
         style={{
@@ -75,7 +75,7 @@ export function Card3D({ children, className = '' }: Card3DProps) {
           opacity: isHovered ? 0.3 : 0,
           transform: "translateZ(80px)",
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       />
 
       {/* Glow effect */}
@@ -84,7 +84,7 @@ export function Card3D({ children, className = '' }: Card3DProps) {
         style={{
           opacity: isHovered ? 0.5 : 0,
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       />
     </motion.div>
   );

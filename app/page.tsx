@@ -276,11 +276,10 @@ const Portfolio = () => {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 10, opacity: 0 },
     visible: {
       y: 0,
-      opacity: 1,
-      transition: { duration: 0.2 }
+      opacity: 1
     }
   };
 
@@ -401,23 +400,23 @@ const Portfolio = () => {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.05, duration: 0.2 }}
                 className="text-lg sm:text-xl text-blue-600 dark:text-blue-400 mb-4"
               >
                 Hi, I&apos;m
               </motion.p>
 
               <motion.h1
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.1, duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="text-5xl sm:text-7xl lg:text-8xl font-bold mb-6"
               >
                 <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -426,18 +425,18 @@ const Portfolio = () => {
               </motion.h1>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.15, duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="text-xl sm:text-3xl text-gray-700 dark:text-gray-300 mb-4"
               >
                 Full Stack Developer
               </motion.p>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.2, duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto"
               >
                 Next.js &amp; Node.js Specialist | Turning ideas into interactive
@@ -480,7 +479,7 @@ const Portfolio = () => {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
+                transition={{ delay: 0.3, duration: 0.25 }}
                 className="flex gap-6 justify-center mt-12"
               >
                 {[
@@ -505,8 +504,8 @@ const Portfolio = () => {
             </motion.div>
 
             <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
             >
               <ChevronDown size={32} className="text-gray-400" />
@@ -517,7 +516,7 @@ const Portfolio = () => {
         {/* About Section */}
         <section id="about" className="py-20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection direction="up" delay={0.1}>
+            <AnimatedSection direction="up" delay={0}>
               <h2 className="text-4xl sm:text-5xl font-bold text-center mb-16">
                 About{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -527,7 +526,7 @@ const Portfolio = () => {
             </AnimatedSection>
 
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <AnimatedSection direction="left" delay={0.2}>
+              <AnimatedSection direction="left" delay={0.05}>
                 <div className="space-y-6">
                   <p className="text-lg text-gray-700 dark:text-gray-300">
                     Enthusiastic Full-Stack Developer with{" "}
@@ -577,9 +576,9 @@ const Portfolio = () => {
                 </div>
               </AnimatedSection>
 
-              <AnimatedSection direction="right" delay={0.3}>
+              <AnimatedSection direction="right" delay={0.05}>
                 <h3 className="text-2xl font-bold mb-6">Technical Skills</h3>
-                <StaggerChildren staggerDelay={0.1}>
+                <StaggerChildren staggerDelay={0.03}>
                   <div className="grid grid-cols-2 gap-4">
                     {skills.map((skill, idx) => {
                       const Icon = skill.icon;
@@ -601,13 +600,13 @@ const Portfolio = () => {
 
             {/* Experience Timeline */}
             <div className="mt-16 space-y-6">
-              <AnimatedSection direction="up" delay={0.4}>
+              <AnimatedSection direction="up" delay={0.1}>
                 <h3 className="text-3xl font-bold mb-8 text-center">
                   Experience
                 </h3>
               </AnimatedSection>
 
-              <StaggerChildren staggerDelay={0.2}>
+              <StaggerChildren staggerDelay={0.06}>
                 {experience.map((exp, idx) => (
                   <motion.div key={idx} variants={itemVariants}>
                     <Card3D>
@@ -657,7 +656,7 @@ const Portfolio = () => {
         {/* Projects Section */}
         <section id="projects" className="py-20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection direction="up" delay={0.1}>
+            <AnimatedSection direction="up" delay={0}>
               <h2 className="text-4xl sm:text-5xl font-bold text-center mb-8">
                 Featured{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -666,7 +665,7 @@ const Portfolio = () => {
               </h2>
             </AnimatedSection>
 
-            <FadeInSection delay={0.2}>
+            <FadeInSection delay={0.02}>
               <div className="flex flex-wrap justify-center gap-4 mb-12">
                 {categories.map((category) => (
                   <motion.button
@@ -696,10 +695,10 @@ const Portfolio = () => {
                   <motion.div
                     key={project.id}
                     layout
-                    initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
-                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, rotateY: 15 }}
-                    transition={{ duration: 0.5 }}
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.92 }}
+                    transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
                   >
                     <Card3D className="h-full">
                       <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all h-full flex flex-col">
@@ -756,7 +755,7 @@ const Portfolio = () => {
         {/* Services Section */}
         <section id="services" className="py-20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection direction="up" delay={0.1}>
+            <AnimatedSection direction="up" delay={0}>
               <h2 className="text-4xl sm:text-5xl font-bold text-center mb-16">
                 What I{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -765,7 +764,7 @@ const Portfolio = () => {
               </h2>
             </AnimatedSection>
 
-            <StaggerChildren staggerDelay={0.15}>
+            <StaggerChildren staggerDelay={0.05}>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {services.map((service, idx) => {
                   const Icon = service.icon;
@@ -837,7 +836,7 @@ const Portfolio = () => {
           />
 
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <AnimatedSection direction="up" delay={0.1}>
+            <AnimatedSection direction="up" delay={0}>
               <h2 className="text-4xl sm:text-5xl font-bold text-center mb-16">
                 Get In{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -846,7 +845,7 @@ const Portfolio = () => {
               </h2>
             </AnimatedSection>
 
-            <FadeInSection delay={0.3}>
+            <FadeInSection delay={0.05}>
               <Card3D>
                 <form
                   onSubmit={handleSubmit}
@@ -973,7 +972,7 @@ const Portfolio = () => {
               </Card3D>
             </FadeInSection>
 
-            <AnimatedSection direction="up" delay={0.5}>
+            <AnimatedSection direction="up" delay={0.08}>
               <div className="mt-12 text-center space-y-4">
                 <p className="text-gray-600 dark:text-gray-400">
                   Or reach me directly at:

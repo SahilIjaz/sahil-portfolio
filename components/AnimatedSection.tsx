@@ -38,9 +38,9 @@ export function AnimatedSection({
       x: 0,
       y: 0,
       transition: {
-        duration: 0.7,
+        duration: 0.25,
         delay: delay,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.25, 0.46, 0.45, 0.94],
       },
     },
   };
@@ -77,12 +77,12 @@ export function FadeInSection({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.98 }}
       transition={{
-        duration: 0.8,
+        duration: 0.2,
         delay: delay,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.25, 0.46, 0.45, 0.94],
       }}
       className={className}
     >
@@ -111,7 +111,7 @@ export function StaggerChildren({
       opacity: 1,
       transition: {
         staggerChildren: staggerDelay,
-        delayChildren: 0.2,
+        delayChildren: 0.05,
       },
     },
   };
@@ -130,13 +130,13 @@ export function StaggerChildren({
 }
 
 export const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
+      duration: 0.2,
+      ease: [0.25, 0.46, 0.45, 0.94],
     },
   },
 };
