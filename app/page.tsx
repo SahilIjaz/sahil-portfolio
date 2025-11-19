@@ -7,6 +7,9 @@ import {
   Code2, Database, Cloud, Zap, MessageSquare, Menu, X,
   Sun, Moon, ChevronDown, MapPin, Calendar, Building2
 } from 'lucide-react';
+import { Card3D } from '@/components/Card3D';
+import { AnimatedSection, FadeInSection, StaggerChildren, itemVariants } from '@/components/AnimatedSection';
+import { DynamicBackground } from '@/components/DynamicBackground';
 
 // Type definitions for better type safety (Next.js 16 + React 19)
 interface Project {
@@ -283,7 +286,10 @@ const Portfolio = () => {
 
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
-      <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+      {/* Dynamic Animated Background */}
+      <DynamicBackground darkMode={darkMode} />
+
+      <div className="relative bg-transparent text-gray-900 dark:text-white transition-colors duration-300">
         {/* Navigation */}
         <motion.nav
           initial={{ y: -100 }}
@@ -509,26 +515,20 @@ const Portfolio = () => {
         </section>
 
         {/* About Section */}
-        <section id="about" className="py-20 bg-gray-50 dark:bg-gray-800/50">
+        <section id="about" className="py-20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.h2
-                variants={itemVariants}
-                className="text-4xl sm:text-5xl font-bold text-center mb-16"
-              >
+            <AnimatedSection direction="up" delay={0.1}>
+              <h2 className="text-4xl sm:text-5xl font-bold text-center mb-16">
                 About{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Me
                 </span>
-              </motion.h2>
+              </h2>
+            </AnimatedSection>
 
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                <motion.div variants={itemVariants} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <AnimatedSection direction="left" delay={0.2}>
+                <div className="space-y-6">
                   <p className="text-lg text-gray-700 dark:text-gray-300">
                     Enthusiastic Full-Stack Developer with{" "}
                     <span className="font-semibold text-blue-600 dark:text-blue-400">
@@ -574,39 +574,44 @@ const Portfolio = () => {
                       </span>
                     </div>
                   </div>
-                </motion.div>
+                </div>
+              </AnimatedSection>
 
-                <motion.div variants={itemVariants}>
-                  <h3 className="text-2xl font-bold mb-6">Technical Skills</h3>
+              <AnimatedSection direction="right" delay={0.3}>
+                <h3 className="text-2xl font-bold mb-6">Technical Skills</h3>
+                <StaggerChildren staggerDelay={0.1}>
                   <div className="grid grid-cols-2 gap-4">
                     {skills.map((skill, idx) => {
                       const Icon = skill.icon;
                       return (
-                        <motion.div
-                          key={idx}
-                          whileHover={{ scale: 1.05, y: -5 }}
-                          className="p-4 bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-xl transition-all"
-                        >
-                          <Icon className={`${skill.color} mb-2`} size={24} />
-                          <p className="font-semibold">{skill.name}</p>
+                        <motion.div key={idx} variants={itemVariants}>
+                          <Card3D className="h-full">
+                            <div className="p-4 bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-xl transition-all h-full">
+                              <Icon className={`${skill.color} mb-2`} size={24} />
+                              <p className="font-semibold">{skill.name}</p>
+                            </div>
+                          </Card3D>
                         </motion.div>
                       );
                     })}
                   </div>
-                </motion.div>
-              </div>
+                </StaggerChildren>
+              </AnimatedSection>
+            </div>
 
-              {/* Experience Timeline */}
-              <motion.div variants={itemVariants} className="mt-16 space-y-6">
+            {/* Experience Timeline */}
+            <div className="mt-16 space-y-6">
+              <AnimatedSection direction="up" delay={0.4}>
                 <h3 className="text-3xl font-bold mb-8 text-center">
                   Experience
                 </h3>
+              </AnimatedSection>
+
+              <StaggerChildren staggerDelay={0.2}>
                 {experience.map((exp, idx) => (
-                  <motion.div
-                    key={idx}
-                    whileHover={{ scale: 1.02 }}
-                    className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg"
-                  >
+                  <motion.div key={idx} variants={itemVariants}>
+                    <Card3D>
+                      <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                       <div>
                         <h4 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
@@ -640,36 +645,29 @@ const Portfolio = () => {
                         </li>
                       ))}
                     </ul>
+                      </div>
+                    </Card3D>
                   </motion.div>
                 ))}
-              </motion.div>
-            </motion.div>
+              </StaggerChildren>
+            </div>
           </div>
         </section>
 
         {/* Projects Section */}
-        <section id="projects" className="py-20">
+        <section id="projects" className="py-20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.h2
-                variants={itemVariants}
-                className="text-4xl sm:text-5xl font-bold text-center mb-8"
-              >
+            <AnimatedSection direction="up" delay={0.1}>
+              <h2 className="text-4xl sm:text-5xl font-bold text-center mb-8">
                 Featured{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Projects
                 </span>
-              </motion.h2>
+              </h2>
+            </AnimatedSection>
 
-              <motion.div
-                variants={itemVariants}
-                className="flex flex-wrap justify-center gap-4 mb-12"
-              >
+            <FadeInSection delay={0.2}>
+              <div className="flex flex-wrap justify-center gap-4 mb-12">
                 {categories.map((category) => (
                   <motion.button
                     key={category}
@@ -686,27 +684,29 @@ const Portfolio = () => {
                     {category}
                   </motion.button>
                 ))}
-              </motion.div>
+              </div>
+            </FadeInSection>
 
-              <motion.div
-                layout
-                className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-              >
-                <AnimatePresence>
-                  {filteredProjects.map((project) => (
-                    <motion.div
-                      key={project.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      whileHover={{ y: -10 }}
-                      className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all"
-                    >
-                      <div
-                        className={`h-2 bg-gradient-to-r ${project.gradient}`}
-                      />
-                      <div className="p-6">
+            <motion.div
+              layout
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              <AnimatePresence mode="popLayout">
+                {filteredProjects.map((project) => (
+                  <motion.div
+                    key={project.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
+                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, rotateY: 15 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Card3D className="h-full">
+                      <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all h-full flex flex-col">
+                        <div
+                          className={`h-2 bg-gradient-to-r ${project.gradient}`}
+                        />
+                        <div className="p-6 flex-1 flex flex-col">
                         <h3 className="text-2xl font-bold mb-3">
                           {project.name}
                         </h3>
@@ -743,62 +743,56 @@ const Portfolio = () => {
                             Code
                           </motion.button>
                         </div>
+                        </div>
                       </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </motion.div>
+                    </Card3D>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </motion.div>
           </div>
         </section>
 
         {/* Services Section */}
-        <section id="services" className="py-20 bg-gray-50 dark:bg-gray-800/50">
+        <section id="services" className="py-20 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.h2
-                variants={itemVariants}
-                className="text-4xl sm:text-5xl font-bold text-center mb-16"
-              >
+            <AnimatedSection direction="up" delay={0.1}>
+              <h2 className="text-4xl sm:text-5xl font-bold text-center mb-16">
                 What I{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Offer
                 </span>
-              </motion.h2>
+              </h2>
+            </AnimatedSection>
 
+            <StaggerChildren staggerDelay={0.15}>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {services.map((service, idx) => {
                   const Icon = service.icon;
                   return (
-                    <motion.div
-                      key={idx}
-                      variants={itemVariants}
-                      whileHover={{ scale: 1.05, y: -10 }}
-                      className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all"
-                    >
-                      <motion.div
-                        whileHover={{ rotate: 360 }}
-                        transition={{ duration: 0.5 }}
-                        className={`w-16 h-16 rounded-lg bg-gradient-to-r ${service.gradient} flex items-center justify-center mb-4`}
-                      >
-                        <Icon size={32} className="text-white" />
-                      </motion.div>
-                      <h3 className="text-xl font-bold mb-3">
-                        {service.title}
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        {service.description}
-                      </p>
+                    <motion.div key={idx} variants={itemVariants}>
+                      <Card3D className="h-full">
+                        <div className="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all h-full">
+                          <motion.div
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.5 }}
+                            className={`w-16 h-16 rounded-lg bg-gradient-to-r ${service.gradient} flex items-center justify-center mb-4`}
+                          >
+                            <Icon size={32} className="text-white" />
+                          </motion.div>
+                          <h3 className="text-xl font-bold mb-3">
+                            {service.title}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-400">
+                            {service.description}
+                          </p>
+                        </div>
+                      </Card3D>
                     </motion.div>
                   );
                 })}
               </div>
-            </motion.div>
+            </StaggerChildren>
           </div>
         </section>
 
@@ -843,28 +837,21 @@ const Portfolio = () => {
           />
 
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={containerVariants}
-            >
-              <motion.h2
-                variants={itemVariants}
-                className="text-4xl sm:text-5xl font-bold text-center mb-16"
-              >
+            <AnimatedSection direction="up" delay={0.1}>
+              <h2 className="text-4xl sm:text-5xl font-bold text-center mb-16">
                 Get In{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Touch
                 </span>
-              </motion.h2>
+              </h2>
+            </AnimatedSection>
 
-              <motion.form
-                variants={itemVariants}
-                onSubmit={handleSubmit}
-                whileHover={{ scale: 1.01 }}
-                className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-2xl space-y-6 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
-              >
+            <FadeInSection delay={0.3}>
+              <Card3D>
+                <form
+                  onSubmit={handleSubmit}
+                  className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-2xl space-y-6 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
+                >
                 {/* Gradient border glow effect */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 dark:from-blue-500/10 dark:via-purple-500/10 dark:to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -982,12 +969,12 @@ const Portfolio = () => {
                     'Send Message'
                   )}
                 </motion.button>
-              </motion.form>
+                </form>
+              </Card3D>
+            </FadeInSection>
 
-              <motion.div
-                variants={itemVariants}
-                className="mt-12 text-center space-y-4"
-              >
+            <AnimatedSection direction="up" delay={0.5}>
+              <div className="mt-12 text-center space-y-4">
                 <p className="text-gray-600 dark:text-gray-400">
                   Or reach me directly at:
                 </p>
@@ -1000,8 +987,8 @@ const Portfolio = () => {
                 <p className="text-gray-600 dark:text-gray-400">
                   +92-302-4891399
                 </p>
-              </motion.div>
-            </motion.div>
+              </div>
+            </AnimatedSection>
           </div>
         </section>
 
