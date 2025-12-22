@@ -158,6 +158,7 @@ const experience: Experience[] = [
       "Integrated Socket.IO, Stripe, and Agora services",
       "Deployed applications on AWS EC2 and managed media via S3",
     ],
+    
   },
   {
     company: "Gama Developers",
