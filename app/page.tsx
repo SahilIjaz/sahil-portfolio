@@ -163,7 +163,7 @@ const experience: Experience[] = [
     company: "Gama Developers",
     role: "Full-Stack Developer",
     location: "Lahore, Pakistan",
-    period: "October 2025 – present",
+    period: "October 2025 – November 2025",
     description:
       "Software development company specializing in scalable digital solutions",
     highlights: [
