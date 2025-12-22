@@ -159,8 +159,6 @@ const experience: Experience[] = [
       "Deployed applications on AWS EC2 and managed media via S3",
     ],
   },
-
-  
   {
     company: "Gama Developers",
     role: "Full-Stack Developer",
