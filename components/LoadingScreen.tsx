@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LoadingScreenProps {
@@ -11,6 +11,20 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   const [isComplete, setIsComplete] = useState(false);
 
   const letters = ['S', 'A', 'H', 'I', 'L'];
+
+  // Generate orb properties once on mount to avoid hydration mismatch
+  const orbs = useMemo(() => {
+    return [...Array(20)].map((_, i) => ({
+      width: Math.random() * 300 + 50,
+      height: Math.random() * 300 + 50,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      color: ['rgba(59, 130, 246, 0.15)', 'rgba(147, 51, 234, 0.15)', 'rgba(236, 72, 153, 0.15)'][i % 3],
+      xMovement: Math.random() * 100 - 50,
+      yMovement: Math.random() * 100 - 50,
+      duration: Math.random() * 5 + 5,
+    }));
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -116,27 +130,25 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
 
           {/* Animated particles/orbs */}
           <div className="absolute inset-0 overflow-hidden">
-            {[...Array(20)].map((_, i) => (
+            {orbs.map((orb, i) => (
               <motion.div
                 key={i}
                 className="absolute rounded-full"
                 style={{
-                  width: Math.random() * 300 + 50,
-                  height: Math.random() * 300 + 50,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  background: `radial-gradient(circle, ${
-                    ['rgba(59, 130, 246, 0.15)', 'rgba(147, 51, 234, 0.15)', 'rgba(236, 72, 153, 0.15)'][i % 3]
-                  } 0%, transparent 70%)`,
+                  width: orb.width,
+                  height: orb.height,
+                  left: orb.left,
+                  top: orb.top,
+                  background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
                 }}
                 animate={{
-                  x: [0, Math.random() * 100 - 50, 0],
-                  y: [0, Math.random() * 100 - 50, 0],
+                  x: [0, orb.xMovement, 0],
+                  y: [0, orb.yMovement, 0],
                   scale: [1, 1.2, 1],
                   opacity: [0.3, 0.6, 0.3],
                 }}
                 transition={{
-                  duration: Math.random() * 5 + 5,
+                  duration: orb.duration,
                   repeat: Infinity,
                   ease: 'easeInOut',
                 }}
