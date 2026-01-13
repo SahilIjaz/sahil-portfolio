@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useMemo } from 'react';
+import { motion, AnimatePresence, Variants, Transition } from 'framer-motion';
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
@@ -35,7 +35,7 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
     return () => clearTimeout(timer);
   }, [onLoadingComplete]);
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 1 },
     visible: {
       opacity: 1,
@@ -44,18 +44,14 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
         delayChildren: 0.3,
       },
     },
-    exit: {
-      opacity: 0,
-      scale: 1.5,
-      filter: 'blur(20px)',
-      transition: {
-        duration: 0.8,
-        ease: [0.43, 0.13, 0.23, 0.96],
-      },
-    },
   };
 
-  const letterVariants = {
+  const exitTransition: Transition = {
+    duration: 0.8,
+    ease: 'easeInOut',
+  };
+
+  const letterVariants: Variants = {
     hidden: {
       opacity: 0,
       y: 100,
@@ -76,7 +72,7 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
     },
   };
 
-  const glowVariants = {
+  const glowVariants: Variants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: {
       opacity: [0, 1, 0.5],
@@ -89,7 +85,7 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
     },
   };
 
-  const lineVariants = {
+  const lineVariants: Variants = {
     hidden: { scaleX: 0, opacity: 0 },
     visible: {
       scaleX: 1,
@@ -97,7 +93,7 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
       transition: {
         delay: 1.5,
         duration: 0.8,
-        ease: [0.43, 0.13, 0.23, 0.96],
+        ease: 'easeInOut',
       },
     },
   };
@@ -185,7 +181,8 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              exit="exit"
+              exit={{ opacity: 0, scale: 1.5, filter: 'blur(20px)' }}
+              transition={exitTransition}
               className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-8 perspective-1000"
               style={{ perspective: '1000px' }}
             >
