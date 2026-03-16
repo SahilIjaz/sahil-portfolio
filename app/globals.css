@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #030712;
+  --foreground: #ededed;
   --primary: #3b82f6;
   --primary-dark: #2563eb;
   --secondary: #8b5cf6;
@@ -18,7 +18,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #030712;
     --foreground: #ededed;
   }
 }
@@ -32,10 +32,15 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: #030712;
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+}
+
+/* Canvas container for 3D scenes */
+canvas {
+  touch-action: none;
 }
 
 /* Custom scrollbar */

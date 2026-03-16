@@ -10,11 +10,14 @@ import {
 } from 'lucide-react';
 import { Card3D, MagneticButton } from '@/components/Card3D';
 import { AnimatedSection, FadeInSection, StaggerChildren, itemVariants } from '@/components/AnimatedSection';
-import { DynamicBackground } from '@/components/DynamicBackground';
-import { LoadingScreen } from '@/components/LoadingScreen';
 import { AnimatedCursor } from '@/components/AnimatedCursor';
 import { AnimatedText, AnimatedParagraph } from '@/components/AnimatedText';
-import { ThreeScene } from '@/components/ThreeScene';
+import { ThreeBackground } from '@/components/ThreeBackground';
+import { HeroScene } from '@/components/HeroScene';
+import { SkillOrbs } from '@/components/SkillOrbs';
+import { ProjectShowcase3D } from '@/components/ProjectShowcase3D';
+import { LoadingScreen3D } from '@/components/LoadingScreen3D';
+import { SectionDivider3D } from '@/components/SectionDivider3D';
 
 // Type definitions
 interface Project {
@@ -174,27 +177,6 @@ const aiProjectsData: AiProject[] = [
     accentColor: "emerald",
     note: "API key currently suspended — demo may be unavailable.",
   },
-  {
-    id: 3,
-    name: "Advanced 3D Portfolio",
-    tagline: "Interactive portfolio with 3D animations & WebGL",
-    description:
-      "A cutting-edge portfolio website built with advanced animation techniques. Features immersive 3D graphics, fluid GSAP animations, and WebGL-powered visual effects for a premium interactive experience.",
-    howItWorks: [
-      "GSAP Timeline orchestrates complex animation sequences",
-      "Three.js renders 3D objects and WebGL scenes",
-      "TypeScript ensures type-safe, maintainable code",
-      "React components manage animation state & interactions",
-    ],
-    tech: [
-      { label: "Frontend", items: ["React", "TypeScript", "GSAP", "Three.js", "WebGL"] },
-      { label: "Styling & Build", items: ["HTML", "CSS", "Vite"] },
-    ],
-    liveUrl: "https://github.com/raxx21/rajesh-portfolio",
-    gradient: "from-rose-600 via-pink-600 to-purple-600",
-    accentColor: "rose",
-    note: "GSAP Club plugins use trial versions. For production, see GSAP docs.",
-  },
 ];
 
 const skills: Skill[] = [
@@ -285,7 +267,6 @@ const Portfolio = () => {
     }
   }, [darkMode]);
 
-  // Track active section (throttled with RAF to avoid re-renders on every scroll tick)
   useEffect(() => {
     let ticking = false;
 
@@ -367,13 +348,15 @@ const Portfolio = () => {
   }, [formData]);
 
   if (isLoading) {
-    return <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />;
+    return <LoadingScreen3D onLoadingComplete={() => setIsLoading(false)} />;
   }
 
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
       <AnimatedCursor />
-      <DynamicBackground darkMode={darkMode} />
+
+      {/* Full-screen 3D Background */}
+      <ThreeBackground />
 
       <div className="relative bg-transparent text-gray-900 dark:text-white transition-colors duration-500">
         {/* Progress Bar */}
@@ -390,7 +373,7 @@ const Portfolio = () => {
           className="fixed top-0 w-full z-50"
         >
           <div className="mx-4 mt-4">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white/10 dark:bg-gray-900/40 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-gray-700/50 shadow-lg shadow-black/5">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 shadow-lg shadow-black/20">
               <div className="flex justify-between items-center h-16">
                 <MagneticButton>
                   <motion.div
@@ -412,8 +395,8 @@ const Portfolio = () => {
                       whileTap={{ scale: 0.95 }}
                       className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                         activeSection === item.toLowerCase()
-                          ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-blue-400'
-                          : 'hover:bg-white/10 dark:hover:bg-gray-800/50'
+                          ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-blue-400 border border-blue-500/30'
+                          : 'hover:bg-white/10 text-gray-300'
                       }`}
                     >
                       {item}
@@ -427,7 +410,7 @@ const Portfolio = () => {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={toggleDarkMode}
-                      className="p-2.5 rounded-xl bg-white/10 dark:bg-gray-800/50 hover:bg-white/20 dark:hover:bg-gray-700/50 transition-colors"
+                      className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors border border-white/10"
                       aria-label="Toggle dark mode"
                     >
                       <motion.div
@@ -442,7 +425,7 @@ const Portfolio = () => {
 
                   <button
                     onClick={toggleMobileMenu}
-                    className="md:hidden p-2.5 rounded-xl bg-white/10 dark:bg-gray-800/50"
+                    className="md:hidden p-2.5 rounded-xl bg-white/10 border border-white/10"
                     aria-label="Toggle menu"
                   >
                     {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -460,13 +443,13 @@ const Portfolio = () => {
                 exit={{ opacity: 0, y: -20 }}
                 className="md:hidden mx-4 mt-2"
               >
-                <div className="bg-white/10 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/10 dark:border-gray-700/50 p-4 space-y-2">
+                <div className="bg-black/60 backdrop-blur-xl rounded-2xl border border-white/10 p-4 space-y-2">
                   {navItems.map((item) => (
                     <a
                       key={item}
                       href={`#${item.toLowerCase()}`}
                       onClick={toggleMobileMenu}
-                      className="block px-4 py-3 rounded-xl hover:bg-white/10 dark:hover:bg-gray-800/50 transition-colors"
+                      className="block px-4 py-3 rounded-xl hover:bg-white/10 transition-colors text-gray-300"
                     >
                       {item}
                     </a>
@@ -477,8 +460,11 @@ const Portfolio = () => {
           </AnimatePresence>
         </motion.nav>
 
-        {/* Hero Section */}
+        {/* Hero Section with 3D Scene */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+          {/* 3D Hero Scene behind text */}
+          <HeroScene />
+
           <motion.div
             style={{ y: yBg }}
             className="absolute inset-0 pointer-events-none"
@@ -495,7 +481,7 @@ const Portfolio = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 mb-6"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 mb-6 backdrop-blur-sm"
               >
                 <Sparkles size={16} className="text-blue-400" />
                 <span className="text-sm font-medium text-blue-300">Available for freelance work</span>
@@ -503,7 +489,7 @@ const Portfolio = () => {
 
               <AnimatedText
                 text="Hi, I'm"
-                className="text-lg sm:text-xl text-blue-400 dark:text-blue-300 mb-4 font-medium"
+                className="text-lg sm:text-xl text-blue-400 mb-4 font-medium"
                 delay={0.2}
               />
 
@@ -517,7 +503,7 @@ const Portfolio = () => {
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent blur-2xl opacity-50">
                     Sahil Ijaz
                   </span>
-                  <span className="relative bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                  <span className="relative bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]">
                     Sahil Ijaz
                   </span>
                 </span>
@@ -529,16 +515,16 @@ const Portfolio = () => {
                 transition={{ delay: 0.5 }}
                 className="flex flex-wrap items-center justify-center gap-3 mb-6"
               >
-                <span className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-600/20 to-blue-600/10 border border-blue-500/30 text-blue-300 font-semibold">
+                <span className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-600/20 to-blue-600/10 border border-blue-500/30 text-blue-300 font-semibold backdrop-blur-sm">
                   Full Stack Developer
                 </span>
-                <span className="text-gray-500">|</span>
+                <span className="text-gray-600">|</span>
                 <span className="text-gray-400">Next.js &amp; Node.js Specialist</span>
               </motion.div>
 
               <AnimatedParagraph
                 text="Transforming complex ideas into elegant, scalable web solutions. Specializing in real-time applications and modern full-stack development."
-                className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
+                className="text-base sm:text-lg text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
               />
 
               <motion.div
@@ -573,7 +559,7 @@ const Portfolio = () => {
                     whileTap={{ scale: 0.98 }}
                     href="/sahil-resume.pdf"
                     download
-                    className="px-8 py-4 rounded-2xl font-semibold flex items-center gap-2 bg-white/10 dark:bg-gray-800/50 border border-white/20 dark:border-gray-700/50 hover:bg-white/20 dark:hover:bg-gray-700/50 transition-all backdrop-blur-sm"
+                    className="px-8 py-4 rounded-2xl font-semibold flex items-center gap-2 bg-white/5 border border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm text-white"
                   >
                     <Download size={18} />
                     Download Resume
@@ -597,7 +583,7 @@ const Portfolio = () => {
                       href={href}
                       whileHover={{ scale: 1.1, y: -5 }}
                       whileTap={{ scale: 0.9 }}
-                      className="p-4 rounded-2xl bg-white/10 dark:bg-gray-800/50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 transition-all duration-300 backdrop-blur-sm border border-white/10 dark:border-gray-700/50"
+                      className="p-4 rounded-2xl bg-white/5 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 transition-all duration-300 backdrop-blur-sm border border-white/10 text-white"
                       aria-label={label}
                     >
                       <Icon size={22} />
@@ -617,6 +603,9 @@ const Portfolio = () => {
           </div>
         </section>
 
+        {/* 3D Section Divider */}
+        <SectionDivider3D color="#3b82f6" />
+
         {/* About Section */}
         <section id="about" className="py-24 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -628,7 +617,7 @@ const Portfolio = () => {
                     Me
                   </span>
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                <p className="text-gray-400 max-w-2xl mx-auto">
                   Passionate about building exceptional digital experiences
                 </p>
               </div>
@@ -637,21 +626,21 @@ const Portfolio = () => {
             <div className="grid lg:grid-cols-2 gap-12 items-start">
               <AnimatedSection direction="left" delay={0.1}>
                 <Card3D glowColor="blue">
-                  <div className="p-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-700/50">
-                    <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                  <div className="p-8 bg-black/30 backdrop-blur-xl rounded-3xl border border-white/10">
+                    <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-white">
                       <span className="p-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600">
                         <Code2 size={24} className="text-white" />
                       </span>
                       Who I Am
                     </h3>
-                    <div className="space-y-4 text-gray-600 dark:text-gray-300">
+                    <div className="space-y-4 text-gray-300">
                       <p>
                         Enthusiastic Full-Stack Developer with{" "}
-                        <span className="font-semibold text-blue-500">1.5+ years</span>{" "}
+                        <span className="font-semibold text-blue-400">1.5+ years</span>{" "}
                         of proven experience in building scalable, real-time systems using Node.js, Next.js, and React.js.
                       </p>
                       <p>
-                        Currently working at <span className="font-semibold">Gamma Developers</span> in Lahore, Pakistan,
+                        Currently working at <span className="font-semibold text-white">Gamma Developers</span> in Lahore, Pakistan,
                         where I engineer and maintain real-time backend services with optimized performance.
                       </p>
                     </div>
@@ -662,9 +651,9 @@ const Portfolio = () => {
                         { icon: Building2, text: "Gamma Developers - Full-Stack Developer" },
                         { icon: Calendar, text: "Bachelor of IT - Bahria University (2023-2027)" }
                       ].map(({ icon: Icon, text }, idx) => (
-                        <div key={idx} className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-                          <span className="p-2 rounded-lg bg-blue-500/10">
-                            <Icon className="text-blue-500" size={18} />
+                        <div key={idx} className="flex items-center gap-3 text-gray-300">
+                          <span className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                            <Icon className="text-blue-400" size={18} />
                           </span>
                           <span>{text}</span>
                         </div>
@@ -674,68 +663,24 @@ const Portfolio = () => {
                 </Card3D>
               </AnimatedSection>
 
+              {/* 3D Skill Orbs instead of flat progress bars */}
               <AnimatedSection direction="right" delay={0.2}>
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                <div>
+                  <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-white">
                     <span className="p-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600">
                       <Zap size={24} className="text-white" />
                     </span>
                     Technical Skills
                   </h3>
-                  <StaggerChildren staggerDelay={0.05}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {skills.map((skill, idx) => {
-                        const Icon = skill.icon;
-                        return (
-                          <motion.div key={idx} variants={itemVariants}>
-                            <Card3D glowColor={idx % 2 === 0 ? 'blue' : 'purple'} intensity={8}>
-                              <div className="p-5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/50">
-                                <div className="flex items-center gap-3 mb-3">
-                                  <span className={`p-2 rounded-lg bg-gray-100 dark:bg-gray-800 ${skill.color}`}>
-                                    <Icon size={20} />
-                                  </span>
-                                  <span className="font-semibold">{skill.name}</span>
-                                </div>
-                                <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                  <motion.div
-                                    initial={{ width: 0 }}
-                                    whileInView={{ width: `${skill.level}%` }}
-                                    transition={{ duration: 1, delay: idx * 0.1 }}
-                                    viewport={{ once: true }}
-                                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-                                  />
-                                </div>
-                              </div>
-                            </Card3D>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  </StaggerChildren>
+                  <SkillOrbs />
                 </div>
               </AnimatedSection>
             </div>
 
-            {/* 3D Interactive Scene */}
-            <AnimatedSection direction="up" delay={0.1}>
-              <div className="mt-24 mb-24">
-                <h3 className="text-3xl font-bold mb-12 text-center">
-                  Interactive{" "}
-                  <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                    Experience
-                  </span>
-                </h3>
-                <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-                  Move your mouse and scroll to interact with the 3D visualization
-                </p>
-                <ThreeScene />
-              </div>
-            </AnimatedSection>
-
             {/* Experience Timeline */}
             <div className="mt-24">
               <AnimatedSection direction="up" delay={0.1}>
-                <h3 className="text-3xl font-bold mb-12 text-center">
+                <h3 className="text-3xl font-bold mb-12 text-center text-white">
                   Work{" "}
                   <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
                     Experience
@@ -755,16 +700,16 @@ const Portfolio = () => {
                       className={`relative pl-12 lg:pl-0 pb-12 ${idx % 2 === 0 ? 'lg:pr-[52%]' : 'lg:pl-[52%]'}`}
                     >
                       {/* Timeline dot */}
-                      <div className={`absolute left-2.5 lg:left-1/2 transform lg:-translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-4 border-white dark:border-gray-900`} />
+                      <div className={`absolute left-2.5 lg:left-1/2 transform lg:-translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-4 border-gray-900 shadow-lg shadow-blue-500/30`} />
 
                       <Card3D glowColor={idx % 2 === 0 ? 'blue' : 'purple'}>
-                        <div className="p-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/50">
+                        <div className="p-6 bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10">
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                             <div>
-                              <h4 className="text-xl font-bold text-blue-500">{exp.role}</h4>
-                              <p className="text-lg font-semibold">{exp.company}</p>
+                              <h4 className="text-xl font-bold text-blue-400">{exp.role}</h4>
+                              <p className="text-lg font-semibold text-white">{exp.company}</p>
                             </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400 mt-2 sm:mt-0">
+                            <div className="text-sm text-gray-400 mt-2 sm:mt-0">
                               <p className="flex items-center gap-2">
                                 <Calendar size={14} />
                                 {exp.period}
@@ -775,11 +720,11 @@ const Portfolio = () => {
                               </p>
                             </div>
                           </div>
-                          <p className="text-gray-600 dark:text-gray-400 mb-4">{exp.description}</p>
+                          <p className="text-gray-400 mb-4">{exp.description}</p>
                           <ul className="space-y-2">
                             {exp.highlights.map((highlight, hIdx) => (
-                              <li key={hIdx} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                <span className="text-blue-500 mt-1">
+                              <li key={hIdx} className="flex items-start gap-2 text-sm text-gray-300">
+                                <span className="text-blue-400 mt-1">
                                   <ArrowRight size={14} />
                                 </span>
                                 {highlight}
@@ -796,111 +741,122 @@ const Portfolio = () => {
           </div>
         </section>
 
+        {/* 3D Section Divider */}
+        <SectionDivider3D color="#8b5cf6" />
+
         {/* Projects Section */}
         <section id="projects" className="py-24 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4 text-white">
                   Featured{" "}
                   <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                     Projects
                   </span>
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                <p className="text-gray-400 max-w-2xl mx-auto">
                   A showcase of my recent work and side projects
                 </p>
               </div>
             </AnimatedSection>
 
+            {/* 3D Project Showcase */}
             <FadeInSection delay={0.1}>
-              <div className="flex flex-wrap justify-center gap-3 mb-12">
-                {categories.map((category) => (
-                  <motion.button
-                    key={category}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleFilterChange(category)}
-                    className={`px-6 py-2.5 rounded-xl font-medium transition-all duration-300 ${
-                      activeFilter === category
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/25"
-                        : "bg-white/10 dark:bg-gray-800/50 hover:bg-white/20 dark:hover:bg-gray-700/50 border border-white/10 dark:border-gray-700/50"
-                    }`}
-                  >
-                    {category}
-                  </motion.button>
-                ))}
-              </div>
+              <ProjectShowcase3D />
             </FadeInSection>
 
-            <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <AnimatePresence mode="popLayout">
-                {filteredProjects.map((project) => {
-                  const Icon = project.icon;
-                  return (
-                    <motion.div
-                      key={project.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.3 }}
+            {/* Filter + traditional cards below */}
+            <div className="mt-16">
+              <FadeInSection delay={0.1}>
+                <div className="flex flex-wrap justify-center gap-3 mb-12">
+                  {categories.map((category) => (
+                    <motion.button
+                      key={category}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleFilterChange(category)}
+                      className={`px-6 py-2.5 rounded-xl font-medium transition-all duration-300 ${
+                        activeFilter === category
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/25"
+                          : "bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300"
+                      }`}
                     >
-                      <Card3D glowColor="purple" intensity={8}>
-                        <div className="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/50 overflow-hidden group">
-                          {/* Gradient header */}
-                          <div className={`h-32 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
-                            <div className="absolute inset-0 bg-black/20" />
-                            <div className="absolute bottom-4 left-4 flex items-center gap-3">
-                              <span className="p-3 rounded-xl bg-white/20 backdrop-blur-sm">
-                                <Icon size={24} className="text-white" />
-                              </span>
-                              <h3 className="text-2xl font-bold text-white">{project.name}</h3>
-                            </div>
-                          </div>
+                      {category}
+                    </motion.button>
+                  ))}
+                </div>
+              </FadeInSection>
 
-                          <div className="p-6">
-                            <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-                              {project.description}
-                            </p>
-
-                            <div className="flex flex-wrap gap-2 mb-6">
-                              {project.tech.map((tech, idx) => (
-                                <span
-                                  key={idx}
-                                  className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 rounded-lg"
-                                >
-                                  {tech}
+              <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <AnimatePresence mode="popLayout">
+                  {filteredProjects.map((project) => {
+                    const Icon = project.icon;
+                    return (
+                      <motion.div
+                        key={project.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Card3D glowColor="purple" intensity={8}>
+                          <div className="h-full bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden group">
+                            {/* Gradient header */}
+                            <div className={`h-32 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
+                              <div className="absolute inset-0 bg-black/20" />
+                              <div className="absolute bottom-4 left-4 flex items-center gap-3">
+                                <span className="p-3 rounded-xl bg-white/20 backdrop-blur-sm">
+                                  <Icon size={24} className="text-white" />
                                 </span>
-                              ))}
+                                <h3 className="text-2xl font-bold text-white">{project.name}</h3>
+                              </div>
                             </div>
 
-                            <div className="flex gap-4">
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2 text-sm font-medium text-blue-500 hover:text-blue-400 transition-colors"
-                              >
-                                <ExternalLink size={16} />
-                                Live Demo
-                              </motion.button>
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-400 transition-colors"
-                              >
-                                <Github size={16} />
-                                Code
-                              </motion.button>
+                            <div className="p-6">
+                              <p className="text-gray-400 mb-4 line-clamp-2">
+                                {project.description}
+                              </p>
+
+                              <div className="flex flex-wrap gap-2 mb-6">
+                                {project.tech.map((tech, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="px-3 py-1 text-xs font-medium bg-white/5 border border-white/10 rounded-lg text-gray-300"
+                                  >
+                                    {tech}
+                                  </span>
+                                ))}
+                              </div>
+
+                              <div className="flex gap-4">
+                                <motion.button
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  className="flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                                >
+                                  <ExternalLink size={16} />
+                                  Live Demo
+                                </motion.button>
+                                <motion.button
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  className="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-300 transition-colors"
+                                >
+                                  <Github size={16} />
+                                  Code
+                                </motion.button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </Card3D>
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
-            </motion.div>
+                        </Card3D>
+                      </motion.div>
+                    );
+                  })}
+                </AnimatePresence>
+              </motion.div>
+            </div>
           </div>
         </section>
 
@@ -909,24 +865,23 @@ const Portfolio = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">
-                {/* Section badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-6">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-6 backdrop-blur-sm">
                   <Sparkles size={14} />
                   Featured Projects
                 </div>
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4 text-white">
                   AI & Advanced{" "}
                   <span className="bg-gradient-to-r from-violet-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
                     Experiences
                   </span>
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                <p className="text-gray-400 max-w-2xl mx-auto">
                   Production-deployed AI apps and cutting-edge 3D interactive experiences
                 </p>
               </div>
             </AnimatedSection>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto auto-rows-fr">
               {aiProjectsData.map((project, idx) => (
                 <FadeInSection key={project.id} delay={idx * 0.15}>
                   <Card3D
@@ -937,7 +892,7 @@ const Portfolio = () => {
                     }
                     intensity={6}
                   >
-                    <div className="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/50 overflow-hidden flex flex-col">
+                    <div className="h-full bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden flex flex-col">
 
                       {/* Gradient header */}
                       <div className={`bg-gradient-to-br ${project.gradient} p-6 relative overflow-hidden`}>
@@ -957,19 +912,17 @@ const Portfolio = () => {
                       </div>
 
                       <div className="p-6 flex flex-col flex-1 gap-5">
-                        {/* Description */}
-                        <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        <p className="text-gray-400 text-sm leading-relaxed">
                           {project.description}
                         </p>
 
-                        {/* How it works */}
                         <div>
-                          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">
+                          <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3">
                             How it works
                           </p>
                           <ol className="space-y-2">
                             {project.howItWorks.map((step, i) => (
-                              <li key={i} className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+                              <li key={i} className="flex items-start gap-3 text-sm text-gray-300">
                                 <span className={`shrink-0 w-5 h-5 rounded-full bg-gradient-to-br ${project.gradient} text-white text-xs font-bold flex items-center justify-center mt-0.5`}>
                                   {i + 1}
                                 </span>
@@ -979,18 +932,17 @@ const Portfolio = () => {
                           </ol>
                         </div>
 
-                        {/* Tech stack */}
                         <div className="flex flex-col gap-3">
                           {project.tech.map((group) => (
                             <div key={group.label}>
-                              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">
+                              <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-2">
                                 {group.label}
                               </p>
                               <div className="flex flex-wrap gap-2">
                                 {group.items.map((item) => (
                                   <span
                                     key={item}
-                                    className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200/50 dark:border-gray-700/50"
+                                    className="px-3 py-1 text-xs font-medium bg-white/5 rounded-lg border border-white/10 text-gray-300"
                                   >
                                     {item}
                                   </span>
@@ -1000,14 +952,12 @@ const Portfolio = () => {
                           ))}
                         </div>
 
-                        {/* Note if any */}
                         {project.note && (
-                          <p className="text-xs text-amber-500/80 dark:text-amber-400/70 bg-amber-500/5 border border-amber-500/15 rounded-lg px-3 py-2">
+                          <p className="text-xs text-amber-400/70 bg-amber-500/5 border border-amber-500/15 rounded-lg px-3 py-2">
                             ⚠ {project.note}
                           </p>
                         )}
 
-                        {/* CTA */}
                         <div className="mt-auto pt-2">
                           <motion.a
                             href={project.liveUrl}
@@ -1031,18 +981,21 @@ const Portfolio = () => {
           </div>
         </section>
 
+        {/* 3D Section Divider */}
+        <SectionDivider3D color="#ec4899" />
+
         {/* Services Section */}
         <section id="services" className="py-24 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4 text-white">
                   What I{" "}
                   <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                     Offer
                   </span>
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                <p className="text-gray-400 max-w-2xl mx-auto">
                   Comprehensive solutions for your digital needs
                 </p>
               </div>
@@ -1055,15 +1008,15 @@ const Portfolio = () => {
                   return (
                     <motion.div key={idx} variants={itemVariants}>
                       <Card3D glowColor={['blue', 'purple', 'green', 'cyan'][idx % 4]} intensity={8}>
-                        <div className="h-full p-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/50 group">
+                        <div className="h-full p-6 bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 group">
                           <motion.div
                             whileHover={{ scale: 1.1, rotate: 5 }}
                             className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-5 shadow-lg`}
                           >
                             <Icon size={28} className="text-white" />
                           </motion.div>
-                          <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                          <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                          <h3 className="text-xl font-bold mb-3 text-white">{service.title}</h3>
+                          <p className="text-gray-400 text-sm leading-relaxed">
                             {service.description}
                           </p>
                         </div>
@@ -1081,13 +1034,13 @@ const Portfolio = () => {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4 text-white">
                   Get In{" "}
                   <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                     Touch
                   </span>
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                <p className="text-gray-400 max-w-2xl mx-auto">
                   Have a project in mind? Let&apos;s create something amazing together
                 </p>
               </div>
@@ -1097,7 +1050,7 @@ const Portfolio = () => {
               <Card3D glowColor="purple" intensity={6}>
                 <form
                   onSubmit={handleSubmit}
-                  className="p-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-700/50 space-y-6"
+                  className="p-8 bg-black/30 backdrop-blur-xl rounded-3xl border border-white/10 space-y-6"
                 >
                   <AnimatePresence>
                     {submitStatus.type && (
@@ -1107,8 +1060,8 @@ const Portfolio = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className={`p-4 rounded-xl ${
                           submitStatus.type === 'success'
-                            ? 'bg-green-500/10 text-green-500 border border-green-500/20'
-                            : 'bg-red-500/10 text-red-500 border border-red-500/20'
+                            ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                            : 'bg-red-500/10 text-red-400 border border-red-500/20'
                         }`}
                       >
                         {submitStatus.message}
@@ -1118,40 +1071,40 @@ const Portfolio = () => {
 
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Name</label>
+                      <label className="block text-sm font-semibold mb-2 text-gray-300">Name</label>
                       <input
                         type="text"
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         disabled={isSubmitting || isPending}
-                        className="w-full px-4 py-3.5 rounded-xl bg-gray-100/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all"
+                        className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all text-white placeholder-gray-500"
                         placeholder="Your name"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Email</label>
+                      <label className="block text-sm font-semibold mb-2 text-gray-300">Email</label>
                       <input
                         type="email"
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         disabled={isSubmitting || isPending}
-                        className="w-full px-4 py-3.5 rounded-xl bg-gray-100/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all"
+                        className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 transition-all text-white placeholder-gray-500"
                         placeholder="your@email.com"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Message</label>
+                    <label className="block text-sm font-semibold mb-2 text-gray-300">Message</label>
                     <textarea
                       required
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       disabled={isSubmitting || isPending}
-                      className="w-full px-4 py-3.5 rounded-xl bg-gray-100/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:opacity-50 transition-all"
+                      className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:opacity-50 transition-all text-white placeholder-gray-500"
                       placeholder="Tell me about your project..."
                     />
                   </div>
@@ -1185,28 +1138,28 @@ const Portfolio = () => {
 
             <AnimatedSection direction="up" delay={0.2}>
               <div className="mt-12 text-center space-y-4">
-                <p className="text-gray-500 dark:text-gray-400">Or reach me directly at:</p>
+                <p className="text-gray-500">Or reach me directly at:</p>
                 <a
                   href="mailto:hssahil2913@gmail.com"
-                  className="inline-block text-xl font-semibold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+                  className="inline-block text-xl font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
                 >
                   hssahil2913@gmail.com
                 </a>
-                <p className="text-gray-500 dark:text-gray-400">+92-302-4891399</p>
+                <p className="text-gray-500">+92-302-4891399</p>
               </div>
             </AnimatedSection>
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="relative py-12 border-t border-gray-200 dark:border-gray-800">
+        <footer className="relative py-12 border-t border-white/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
               <div className="text-center md:text-left">
                 <p className="text-2xl font-black bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                   Sahil Ijaz
                 </p>
-                <p className="text-gray-500 dark:text-gray-400 mt-1">Full Stack Developer</p>
+                <p className="text-gray-500 mt-1">Full Stack Developer</p>
               </div>
 
               <div className="flex gap-4">
@@ -1220,7 +1173,7 @@ const Portfolio = () => {
                       href={href}
                       whileHover={{ scale: 1.1, y: -3 }}
                       whileTap={{ scale: 0.9 }}
-                      className="p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 hover:text-white transition-all"
+                      className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 hover:text-white transition-all text-gray-400"
                     >
                       <Icon size={18} />
                     </motion.a>
@@ -1229,9 +1182,9 @@ const Portfolio = () => {
               </div>
             </div>
 
-            <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-center text-gray-500 dark:text-gray-400 text-sm">
+            <div className="mt-8 pt-8 border-t border-white/10 text-center text-gray-500 text-sm">
               <p>&copy; {new Date().getFullYear()} Sahil Ijaz. All rights reserved.</p>
-              <p className="mt-2">Built with Next.js, Tailwind CSS &amp; Framer Motion</p>
+              <p className="mt-2">Built with Next.js, Three.js, GSAP &amp; Framer Motion</p>
             </div>
           </div>
         </footer>
