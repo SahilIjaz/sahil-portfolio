@@ -204,25 +204,32 @@ const Portfolio = () => {
     }
   }, [darkMode]);
 
-  // Track active section
+  // Track active section (throttled with RAF to avoid re-renders on every scroll tick)
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['about', 'projects', 'services', 'contact'];
-      const scrollPosition = window.scrollY + 200;
+    let ticking = false;
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const sections = ['about', 'projects', 'services', 'contact'];
+        const scrollPosition = window.scrollY + 200;
+
+        for (const section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const { offsetTop, offsetHeight } = element;
+            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+              setActiveSection(section);
+              break;
+            }
           }
         }
-      }
+        ticking = false;
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

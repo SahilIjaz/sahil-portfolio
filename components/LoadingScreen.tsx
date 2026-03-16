@@ -13,16 +13,17 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   const letters = ['S', 'A', 'H', 'I', 'L'];
 
   // Generate orb properties once on mount to avoid hydration mismatch
+  // Reduced from 20 to 8 orbs for better performance
   const orbs = useMemo(() => {
-    return [...Array(20)].map((_, i) => ({
-      width: Math.random() * 300 + 50,
-      height: Math.random() * 300 + 50,
+    return [...Array(8)].map((_, i) => ({
+      width: Math.random() * 250 + 80,
+      height: Math.random() * 250 + 80,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
       color: ['rgba(59, 130, 246, 0.15)', 'rgba(147, 51, 234, 0.15)', 'rgba(236, 72, 153, 0.15)'][i % 3],
-      xMovement: Math.random() * 100 - 50,
-      yMovement: Math.random() * 100 - 50,
-      duration: Math.random() * 5 + 5,
+      xMovement: Math.random() * 80 - 40,
+      yMovement: Math.random() * 80 - 40,
+      duration: Math.random() * 5 + 8,
     }));
   }, []);
 
@@ -206,22 +207,7 @@ export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
 
                   {/* Main letter */}
                   <motion.span
-                    className="relative text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black bg-gradient-to-br from-white via-blue-100 to-purple-200 bg-clip-text text-transparent"
-                    animate={{
-                      textShadow: [
-                        '0 0 20px rgba(59, 130, 246, 0.5)',
-                        '0 0 40px rgba(147, 51, 234, 0.5)',
-                        '0 0 20px rgba(59, 130, 246, 0.5)',
-                      ],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      delay: index * 0.2,
-                    }}
-                    style={{
-                      textShadow: '0 0 30px rgba(59, 130, 246, 0.5), 0 0 60px rgba(147, 51, 234, 0.3)',
-                    }}
+                    className="relative text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black bg-gradient-to-br from-white via-blue-100 to-purple-200 bg-clip-text text-transparent glow-text"
                   >
                     {letter}
                   </motion.span>

@@ -10,7 +10,6 @@ interface Card3DProps {
   glowColor?: string;
 }
 
-
 export function Card3D({
   children,
   className = '',
@@ -29,24 +28,11 @@ export function Card3D({
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [`${intensity}deg`, `-${intensity}deg`]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [`-${intensity}deg`, `${intensity}deg`]);
 
-  // Shine effect position
-  const shineX = useTransform(mouseXSpring, [-0.5, 0.5], ['0%', '100%']);
-  const shineY = useTransform(mouseYSpring, [-0.5, 0.5], ['0%', '100%']);
-
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
-
     const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-
-    x.set(xPct);
-    y.set(yPct);
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
 
   const handleMouseLeave = () => {
@@ -78,80 +64,23 @@ export function Card3D({
       whileHover={{ scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
     >
-      {/* Main content with 3D depth */}
-      <motion.div
-        style={{
-          transform: 'translateZ(50px)',
-          transformStyle: 'preserve-3d',
-        }}
-        className="relative"
-      >
-        {children}
-      </motion.div>
+      {children}
 
-      {/* Dynamic shine effect */}
-      <motion.div
-        className="absolute inset-0 rounded-xl pointer-events-none overflow-hidden"
-        style={{
-          opacity: isHovered ? 1 : 0,
-          transform: 'translateZ(60px)',
-        }}
-      >
-        <motion.div
-          className="absolute w-full h-full"
+      {/* Glow effect - only rendered when hovered */}
+      {isHovered && (
+        <div
+          className="absolute -inset-2 rounded-2xl blur-xl -z-10 pointer-events-none"
           style={{
-            background: `radial-gradient(circle at ${shineX} ${shineY}, rgba(255, 255, 255, 0.15) 0%, transparent 50%)`,
+            background: `radial-gradient(ellipse at center, ${glowColors[glowColor] || glowColors.blue} 0%, transparent 70%)`,
+            opacity: 0.5,
           }}
         />
-      </motion.div>
-
-      {/* Glossy top reflection */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent rounded-xl pointer-events-none"
-        style={{
-          opacity: isHovered ? 0.5 : 0.2,
-          transform: 'translateZ(55px)',
-        }}
-        transition={{ duration: 0.3 }}
-      />
-
-      {/* Edge highlight */}
-      <motion.div
-        className="absolute inset-0 rounded-xl pointer-events-none"
-        style={{
-          opacity: isHovered ? 1 : 0,
-          boxShadow: `inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -1px 1px rgba(0, 0, 0, 0.1)`,
-          transform: 'translateZ(45px)',
-        }}
-        transition={{ duration: 0.3 }}
-      />
-
-      {/* Glow effect */}
-      <motion.div
-        className="absolute -inset-2 rounded-2xl blur-xl -z-10"
-        style={{
-          background: `radial-gradient(ellipse at center, ${glowColors[glowColor] || glowColors.blue} 0%, transparent 70%)`,
-          opacity: isHovered ? 0.6 : 0,
-        }}
-        transition={{ duration: 0.3 }}
-      />
-
-      {/* Shadow */}
-      <motion.div
-        className="absolute inset-0 rounded-xl -z-20"
-        style={{
-          boxShadow: isHovered
-            ? `0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 50px -15px ${glowColors[glowColor] || glowColors.blue}`
-            : '0 10px 30px -10px rgba(0, 0, 0, 0.3)',
-          transform: 'translateZ(-10px)',
-        }}
-        transition={{ duration: 0.3 }}
-      />
+      )}
     </motion.div>
   );
 }
 
-// Enhanced floating card with continuous animation
+// Simplified floating card - uses CSS animation instead of Framer Motion for better perf
 interface FloatingCardProps {
   children: React.ReactNode;
   className?: string;
@@ -160,24 +89,12 @@ interface FloatingCardProps {
 
 export function FloatingCard({ children, className = '', delay = 0 }: FloatingCardProps) {
   return (
-    <motion.div
-      initial={{ y: 0 }}
-      animate={{
-        y: [-10, 10, -10],
-        rotateX: [2, -2, 2],
-        rotateY: [-2, 2, -2],
-      }}
-      transition={{
-        duration: 6,
-        repeat: Infinity,
-        ease: 'easeInOut',
-        delay,
-      }}
-      style={{ transformStyle: 'preserve-3d' }}
-      className={className}
+    <div
+      className={`animate-float ${className}`}
+      style={{ animationDelay: `${delay}s` }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -195,11 +112,8 @@ export function MagneticButton({ children, className = '' }: MagneticButtonProps
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    x.set((e.clientX - centerX) * 0.3);
-    y.set((e.clientY - centerY) * 0.3);
+    x.set((e.clientX - rect.left - rect.width / 2) * 0.3);
+    y.set((e.clientY - rect.top - rect.height / 2) * 0.3);
   };
 
   const handleMouseLeave = () => {
@@ -232,27 +146,18 @@ interface TiltCardProps {
 
 export function TiltCard({ children, className = '' }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
 
   const rotateX = useMotionValue(0);
   const rotateY = useMotionValue(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
-
     const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const percentX = (e.clientX - centerX) / (rect.width / 2);
-    const percentY = (e.clientY - centerY) / (rect.height / 2);
-
-    rotateY.set(percentX * 15);
-    rotateX.set(-percentY * 15);
+    rotateY.set(((e.clientX - rect.left - rect.width / 2) / (rect.width / 2)) * 15);
+    rotateX.set(-((e.clientY - rect.top - rect.height / 2) / (rect.height / 2)) * 15);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
     rotateX.set(0);
     rotateY.set(0);
   };
@@ -265,7 +170,6 @@ export function TiltCard({ children, className = '' }: TiltCardProps) {
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       style={{
         rotateX: rotateXSpring,
@@ -277,20 +181,7 @@ export function TiltCard({ children, className = '' }: TiltCardProps) {
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       className={`relative ${className}`}
     >
-      <motion.div
-        style={{ transform: 'translateZ(30px)' }}
-      >
-        {children}
-      </motion.div>
-
-      {/* Reflection */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/10 rounded-xl pointer-events-none"
-        style={{
-          opacity: isHovered ? 1 : 0,
-          transform: 'translateZ(35px)',
-        }}
-      />
+      {children}
     </motion.div>
   );
 }

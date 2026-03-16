@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useState, useMemo } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 
 interface DynamicBackgroundProps {
   darkMode: boolean;
@@ -10,21 +10,39 @@ interface DynamicBackgroundProps {
 export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
   const { scrollYProgress } = useScroll();
   const [mounted, setMounted] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Use motion values directly to avoid React re-renders on mouse move
+  const mouseX = useMotionValue(50);
+  const mouseY = useMotionValue(50);
+  const smoothX = useSpring(mouseX, { stiffness: 50, damping: 30 });
+  const smoothY = useSpring(mouseY, { stiffness: 50, damping: 30 });
 
   useEffect(() => {
     setMounted(true);
 
+    let rafId: number;
+    let pendingX = 50;
+    let pendingY = 50;
+
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
+      pendingX = (e.clientX / window.innerWidth) * 100;
+      pendingY = (e.clientY / window.innerHeight) * 100;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    const tick = () => {
+      mouseX.set(pendingX);
+      mouseY.set(pendingY);
+      rafId = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(rafId);
+    };
+  }, [mouseX, mouseY]);
 
   // Transform scroll progress to background colors
   const backgroundColor = useTransform(
@@ -32,18 +50,18 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
     [0, 0.25, 0.5, 0.75, 1],
     darkMode
       ? [
-          'rgb(3, 7, 18)',      // Darker navy - Hero
-          'rgb(10, 15, 30)',    // Dark blue - About
-          'rgb(5, 10, 25)',     // Deep navy - Projects
-          'rgb(10, 15, 30)',    // Dark blue - Services
-          'rgb(3, 7, 18)',      // Darker navy - Contact
+          'rgb(3, 7, 18)',
+          'rgb(10, 15, 30)',
+          'rgb(5, 10, 25)',
+          'rgb(10, 15, 30)',
+          'rgb(3, 7, 18)',
         ]
       : [
-          'rgb(248, 250, 252)', // Slate-50 - Hero
-          'rgb(241, 245, 249)', // Slate-100 - About
-          'rgb(248, 250, 252)', // Slate-50 - Projects
-          'rgb(241, 245, 249)', // Slate-100 - Services
-          'rgb(248, 250, 252)', // Slate-50 - Contact
+          'rgb(248, 250, 252)',
+          'rgb(241, 245, 249)',
+          'rgb(248, 250, 252)',
+          'rgb(241, 245, 249)',
+          'rgb(248, 250, 252)',
         ]
   );
 
@@ -52,14 +70,18 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
   const y2 = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.4, 0.7, 0.4]);
 
-  // Memoize particles for performance
+  // Derived motion values for the mouse-following gradient (no re-renders)
+  const gradientX = useTransform(smoothX, (v) => `${v * 0.5}%`);
+  const gradientY = useTransform(smoothY, (v) => `${v * 0.5}%`);
+
+  // Reduced to 8 particles (from 30)
   const particles = useMemo(() =>
-    [...Array(30)].map((_, i) => ({
+    [...Array(8)].map((_, i) => ({
       id: i,
-      size: Math.random() * 4 + 1,
+      size: Math.random() * 3 + 1,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      duration: Math.random() * 20 + 20,
+      duration: Math.random() * 15 + 25,
       delay: Math.random() * 10,
     })),
     []
@@ -72,24 +94,19 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
       className="fixed inset-0 -z-10 overflow-hidden"
       style={{ backgroundColor }}
     >
-      {/* Main gradient mesh */}
-      <div className="absolute inset-0">
-        {/* Interactive gradient that follows mouse */}
-        <motion.div
-          className="absolute w-[800px] h-[800px] rounded-full blur-[120px] opacity-30"
-          animate={{
-            x: mousePosition.x * 0.5 + '%',
-            y: mousePosition.y * 0.5 + '%',
-          }}
-          transition={{ type: 'spring', stiffness: 50, damping: 30 }}
-          style={{
-            background: darkMode
-              ? 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.2) 50%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)',
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-      </div>
+      {/* Interactive gradient that follows mouse - no React re-renders */}
+      <motion.div
+        className="absolute w-[600px] h-[600px] rounded-full blur-[100px] opacity-25"
+        style={{
+          x: gradientX,
+          y: gradientY,
+          background: darkMode
+            ? 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.2) 50%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)',
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+      />
 
       {/* Gradient Overlay 1 - Top */}
       <motion.div
@@ -98,8 +115,8 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
           y: y1,
           opacity,
           background: darkMode
-            ? 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)'
-            : 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)',
+            ? 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.12) 0%, transparent 50%)'
+            : 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 50%)',
         }}
       />
 
@@ -110,93 +127,46 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
           y: y2,
           opacity,
           background: darkMode
-            ? 'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(139, 92, 246, 0.15) 0%, transparent 50%)'
-            : 'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 50%)',
+            ? 'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(139, 92, 246, 0.12) 0%, transparent 50%)'
+            : 'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 50%)',
         }}
       />
 
-      {/* Animated Orbs with 3D depth */}
-      <motion.div
-        animate={{
-          scale: [1, 1.3, 1],
-          rotate: [0, 180, 360],
-          x: [0, 100, 0],
-          y: [0, -50, 0],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="absolute top-[10%] left-[10%] w-[500px] h-[500px] rounded-full blur-[100px]"
+      {/* Animated Orbs - reduced to 3, slower, CSS-only animation */}
+      <div
+        className="absolute top-[10%] left-[10%] w-[400px] h-[400px] rounded-full blur-[80px]"
         style={{
           background: darkMode
-            ? 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 50%, transparent 70%)',
+            ? 'radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%)',
+          animation: 'orbFloat1 35s ease-in-out infinite',
+          willChange: 'transform',
         }}
       />
 
-      <motion.div
-        animate={{
-          scale: [1.2, 1, 1.2],
-          rotate: [180, 0, 180],
-          x: [0, -80, 0],
-          y: [0, 80, 0],
-        }}
-        transition={{
-          duration: 35,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="absolute bottom-[10%] right-[10%] w-[600px] h-[600px] rounded-full blur-[120px]"
+      <div
+        className="absolute bottom-[10%] right-[10%] w-[450px] h-[450px] rounded-full blur-[90px]"
         style={{
           background: darkMode
-            ? 'radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 70%)',
+            ? 'radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%)',
+          animation: 'orbFloat2 40s ease-in-out infinite',
+          willChange: 'transform',
         }}
       />
 
-      <motion.div
-        animate={{
-          scale: [1, 1.4, 1],
-          rotate: [0, -180, -360],
-          x: [0, 50, 0],
-          y: [0, 100, 0],
-        }}
-        transition={{
-          duration: 40,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="absolute top-[40%] right-[20%] w-[400px] h-[400px] rounded-full blur-[80px]"
+      <div
+        className="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full blur-[70px]"
         style={{
           background: darkMode
-            ? 'radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, rgba(236, 72, 153, 0.05) 50%, transparent 70%)'
-            : 'radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, rgba(236, 72, 153, 0.03) 50%, transparent 70%)',
+            ? 'radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, transparent 70%)',
+          animation: 'orbFloat3 30s ease-in-out infinite',
+          willChange: 'transform',
         }}
       />
 
-      {/* Cyan accent orb */}
-      <motion.div
-        animate={{
-          scale: [1.1, 0.9, 1.1],
-          x: [-30, 30, -30],
-          y: [20, -20, 20],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="absolute top-[60%] left-[30%] w-[300px] h-[300px] rounded-full blur-[60px]"
-        style={{
-          background: darkMode
-            ? 'radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, transparent 60%)'
-            : 'radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 60%)',
-        }}
-      />
-
-      {/* Floating particles */}
+      {/* Reduced particles (8 instead of 30) */}
       <div className="absolute inset-0 overflow-hidden">
         {particles.map((particle) => (
           <motion.div
@@ -212,9 +182,8 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
                 : 'rgba(59, 130, 246, 0.4)',
             }}
             animate={{
-              y: [0, -100, 0],
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
+              y: [0, -80, 0],
+              opacity: [0, 0.8, 0],
             }}
             transition={{
               duration: particle.duration,
@@ -246,14 +215,6 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
           background: darkMode
             ? 'radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%)'
             : 'radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.05) 100%)',
-        }}
-      />
-
-      {/* Noise texture overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }}
       />
     </motion.div>
