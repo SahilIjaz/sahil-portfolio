@@ -24,6 +24,19 @@ interface Project {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
+interface AiProject {
+  id: number;
+  name: string;
+  tagline: string;
+  description: string;
+  howItWorks: string[];
+  tech: { label: string; items: string[] }[];
+  liveUrl: string;
+  gradient: string;
+  accentColor: string;
+  note?: string;
+}
+
 interface Skill {
   name: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
@@ -114,6 +127,50 @@ const projectsData: Project[] = [
     gradient: "from-teal-600 via-cyan-600 to-sky-600",
     icon: Server
   }
+];
+
+const aiProjectsData: AiProject[] = [
+  {
+    id: 1,
+    name: "StudyMate AI",
+    tagline: "Chat with any PDF using RAG + Claude AI",
+    description:
+      "A full-stack Retrieval Augmented Generation app that lets you upload any PDF and have an intelligent conversation with it. Powered by Claude AI for precise, sourced answers.",
+    howItWorks: [
+      "Upload a PDF document",
+      "Text is extracted, chunked & stored in a FAISS vector database",
+      "Ask a question — relevant chunks are retrieved instantly",
+      "Claude AI generates a precise, sourced answer",
+    ],
+    tech: [
+      { label: "Backend", items: ["Python", "FastAPI", "FAISS", "pdfplumber", "Claude API", "Render"] },
+      { label: "Frontend", items: ["Next.js 14", "TypeScript", "Tailwind CSS", "Vercel"] },
+    ],
+    liveUrl: "https://lnkd.in/dHzShMTM",
+    gradient: "from-violet-600 via-indigo-600 to-blue-600",
+    accentColor: "violet",
+  },
+  {
+    id: 2,
+    name: "AI Resume Analyzer",
+    tagline: "Get Claude AI feedback on your resume in seconds",
+    description:
+      "Upload your resume, enter a job title, and receive detailed AI-powered feedback instantly. Scores your resume against the role and highlights strengths and gaps.",
+    howItWorks: [
+      "Upload your resume PDF",
+      "Enter the target job title",
+      "Claude AI analyzes fit, strengths & gaps",
+      "Get a detailed score and actionable feedback",
+    ],
+    tech: [
+      { label: "Frontend", items: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"] },
+      { label: "Backend", items: ["Node.js", "Express", "TypeScript", "Claude API", "Render"] },
+    ],
+    liveUrl: "https://lnkd.in/d6_4aW2X",
+    gradient: "from-emerald-600 via-teal-600 to-cyan-600",
+    accentColor: "emerald",
+    note: "API key currently suspended — demo may be unavailable.",
+  },
 ];
 
 const skills: Skill[] = [
@@ -811,6 +868,126 @@ const Portfolio = () => {
                 })}
               </AnimatePresence>
             </motion.div>
+          </div>
+        </section>
+
+        {/* AI Projects Section */}
+        <section className="py-24 relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimatedSection direction="up" delay={0}>
+              <div className="text-center mb-16">
+                {/* Section badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-6">
+                  <Sparkles size={14} />
+                  Live AI Projects
+                </div>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">
+                  Built with{" "}
+                  <span className="bg-gradient-to-r from-violet-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+                    AI
+                  </span>
+                </h2>
+                <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                  Production-deployed apps powered by Claude AI and modern RAG architecture
+                </p>
+              </div>
+            </AnimatedSection>
+
+            <div className="grid lg:grid-cols-2 gap-8">
+              {aiProjectsData.map((project, idx) => (
+                <FadeInSection key={project.id} delay={idx * 0.15}>
+                  <Card3D glowColor={project.accentColor === 'violet' ? 'purple' : 'cyan'} intensity={6}>
+                    <div className="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/50 overflow-hidden flex flex-col">
+
+                      {/* Gradient header */}
+                      <div className={`bg-gradient-to-br ${project.gradient} p-6 relative overflow-hidden`}>
+                        <div className="absolute inset-0 bg-black/10" />
+                        <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
+                        <div className="relative z-10">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <h3 className="text-2xl font-black text-white mb-1">{project.name}</h3>
+                              <p className="text-white/80 text-sm font-medium">{project.tagline}</p>
+                            </div>
+                            <span className="shrink-0 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-semibold border border-white/30">
+                              Live
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-6 flex flex-col flex-1 gap-5">
+                        {/* Description */}
+                        <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                          {project.description}
+                        </p>
+
+                        {/* How it works */}
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">
+                            How it works
+                          </p>
+                          <ol className="space-y-2">
+                            {project.howItWorks.map((step, i) => (
+                              <li key={i} className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+                                <span className={`shrink-0 w-5 h-5 rounded-full bg-gradient-to-br ${project.gradient} text-white text-xs font-bold flex items-center justify-center mt-0.5`}>
+                                  {i + 1}
+                                </span>
+                                {step}
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+
+                        {/* Tech stack */}
+                        <div className="flex flex-col gap-3">
+                          {project.tech.map((group) => (
+                            <div key={group.label}>
+                              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">
+                                {group.label}
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {group.items.map((item) => (
+                                  <span
+                                    key={item}
+                                    className="px-3 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200/50 dark:border-gray-700/50"
+                                  >
+                                    {item}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Note if any */}
+                        {project.note && (
+                          <p className="text-xs text-amber-500/80 dark:text-amber-400/70 bg-amber-500/5 border border-amber-500/15 rounded-lg px-3 py-2">
+                            ⚠ {project.note}
+                          </p>
+                        )}
+
+                        {/* CTA */}
+                        <div className="mt-auto pt-2">
+                          <motion.a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r ${project.gradient} text-white font-semibold text-sm shadow-lg transition-opacity hover:opacity-90`}
+                          >
+                            <ExternalLink size={15} />
+                            View Live Project
+                            <ArrowRight size={15} />
+                          </motion.a>
+                        </div>
+                      </div>
+                    </div>
+                  </Card3D>
+                </FadeInSection>
+              ))}
+            </div>
           </div>
         </section>
 
