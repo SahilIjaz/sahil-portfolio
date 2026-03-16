@@ -358,6 +358,9 @@ const Portfolio = () => {
       {/* Full-screen 3D Background */}
       <ThreeBackground />
 
+      {/* Blur overlay between 3D background and content */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: -5, backdropFilter: 'blur(2px)', background: 'rgba(0,0,0,0.30)' }} />
+
       <div className="relative bg-transparent text-gray-900 dark:text-white transition-colors duration-500">
         {/* Progress Bar */}
         <motion.div
