@@ -12,6 +12,9 @@ import { Card3D, MagneticButton } from '@/components/Card3D';
 import { AnimatedSection, FadeInSection, StaggerChildren, itemVariants } from '@/components/AnimatedSection';
 import { DynamicBackground } from '@/components/DynamicBackground';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { AnimatedCursor } from '@/components/AnimatedCursor';
+import { AnimatedText, AnimatedParagraph } from '@/components/AnimatedText';
+import { ThreeScene } from '@/components/ThreeScene';
 
 // Type definitions
 interface Project {
@@ -170,6 +173,27 @@ const aiProjectsData: AiProject[] = [
     gradient: "from-emerald-600 via-teal-600 to-cyan-600",
     accentColor: "emerald",
     note: "API key currently suspended — demo may be unavailable.",
+  },
+  {
+    id: 3,
+    name: "Advanced 3D Portfolio",
+    tagline: "Interactive portfolio with 3D animations & WebGL",
+    description:
+      "A cutting-edge portfolio website built with advanced animation techniques. Features immersive 3D graphics, fluid GSAP animations, and WebGL-powered visual effects for a premium interactive experience.",
+    howItWorks: [
+      "GSAP Timeline orchestrates complex animation sequences",
+      "Three.js renders 3D objects and WebGL scenes",
+      "TypeScript ensures type-safe, maintainable code",
+      "React components manage animation state & interactions",
+    ],
+    tech: [
+      { label: "Frontend", items: ["React", "TypeScript", "GSAP", "Three.js", "WebGL"] },
+      { label: "Styling & Build", items: ["HTML", "CSS", "Vite"] },
+    ],
+    liveUrl: "https://github.com/raxx21/rajesh-portfolio",
+    gradient: "from-rose-600 via-pink-600 to-purple-600",
+    accentColor: "rose",
+    note: "GSAP Club plugins use trial versions. For production, see GSAP docs.",
   },
 ];
 
@@ -348,6 +372,7 @@ const Portfolio = () => {
 
   return (
     <div className={`min-h-screen ${darkMode ? "dark" : ""}`}>
+      <AnimatedCursor />
       <DynamicBackground darkMode={darkMode} />
 
       <div className="relative bg-transparent text-gray-900 dark:text-white transition-colors duration-500">
@@ -476,14 +501,11 @@ const Portfolio = () => {
                 <span className="text-sm font-medium text-blue-300">Available for freelance work</span>
               </motion.div>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+              <AnimatedText
+                text="Hi, I'm"
                 className="text-lg sm:text-xl text-blue-400 dark:text-blue-300 mb-4 font-medium"
-              >
-                Hi, I&apos;m
-              </motion.p>
+                delay={0.2}
+              />
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
@@ -514,15 +536,10 @@ const Portfolio = () => {
                 <span className="text-gray-400">Next.js &amp; Node.js Specialist</span>
               </motion.div>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
+              <AnimatedParagraph
+                text="Transforming complex ideas into elegant, scalable web solutions. Specializing in real-time applications and modern full-stack development."
                 className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
-              >
-                Transforming complex ideas into elegant, scalable web solutions.
-                Specializing in real-time applications and modern full-stack development.
-              </motion.p>
+              />
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -698,6 +715,22 @@ const Portfolio = () => {
                 </div>
               </AnimatedSection>
             </div>
+
+            {/* 3D Interactive Scene */}
+            <AnimatedSection direction="up" delay={0.1}>
+              <div className="mt-24 mb-24">
+                <h3 className="text-3xl font-bold mb-12 text-center">
+                  Interactive{" "}
+                  <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                    Experience
+                  </span>
+                </h3>
+                <p className="text-center text-gray-500 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
+                  Move your mouse and scroll to interact with the 3D visualization
+                </p>
+                <ThreeScene />
+              </div>
+            </AnimatedSection>
 
             {/* Experience Timeline */}
             <div className="mt-24">
@@ -879,24 +912,31 @@ const Portfolio = () => {
                 {/* Section badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-6">
                   <Sparkles size={14} />
-                  Live AI Projects
+                  Featured Projects
                 </div>
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">
-                  Built with{" "}
+                  AI & Advanced{" "}
                   <span className="bg-gradient-to-r from-violet-500 via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
-                    AI
+                    Experiences
                   </span>
                 </h2>
                 <p className="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-                  Production-deployed apps powered by Claude AI and modern RAG architecture
+                  Production-deployed AI apps and cutting-edge 3D interactive experiences
                 </p>
               </div>
             </AnimatedSection>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
               {aiProjectsData.map((project, idx) => (
                 <FadeInSection key={project.id} delay={idx * 0.15}>
-                  <Card3D glowColor={project.accentColor === 'violet' ? 'purple' : 'cyan'} intensity={6}>
+                  <Card3D
+                    glowColor={
+                      project.accentColor === 'violet' ? 'purple'
+                      : project.accentColor === 'rose' ? 'pink'
+                      : 'cyan'
+                    }
+                    intensity={6}
+                  >
                     <div className="h-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/50 overflow-hidden flex flex-col">
 
                       {/* Gradient header */}
