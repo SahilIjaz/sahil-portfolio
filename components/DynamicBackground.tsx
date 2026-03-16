@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 
 interface DynamicBackgroundProps {
@@ -19,6 +19,16 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
 
   useEffect(() => {
     setMounted(true);
+    setParticles(
+      [...Array(8)].map((_, i) => ({
+        id: i,
+        size: Math.random() * 3 + 1,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        duration: Math.random() * 15 + 25,
+        delay: Math.random() * 10,
+      }))
+    );
 
     let rafId: number;
     let pendingX = 50;
@@ -74,18 +84,8 @@ export function DynamicBackground({ darkMode }: DynamicBackgroundProps) {
   const gradientX = useTransform(smoothX, (v) => `${v * 0.5}%`);
   const gradientY = useTransform(smoothY, (v) => `${v * 0.5}%`);
 
-  // Reduced to 8 particles (from 30)
-  const particles = useMemo(() =>
-    [...Array(8)].map((_, i) => ({
-      id: i,
-      size: Math.random() * 3 + 1,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: Math.random() * 15 + 25,
-      delay: Math.random() * 10,
-    })),
-    []
-  );
+  type Particle = { id: number; size: number; x: number; y: number; duration: number; delay: number };
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   if (!mounted) return null;
 

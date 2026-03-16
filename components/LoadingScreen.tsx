@@ -1,30 +1,37 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, Variants, Transition } from 'framer-motion';
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
 }
 
+type Orb = {
+  width: number; height: number; left: string; top: string;
+  color: string; xMovement: number; yMovement: number; duration: number;
+};
+
 export function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
   const [isComplete, setIsComplete] = useState(false);
+  // Start null — populated client-side only to avoid SSR/client Math.random() mismatch
+  const [orbs, setOrbs] = useState<Orb[]>([]);
 
   const letters = ['S', 'A', 'H', 'I', 'L'];
 
-  // Generate orb properties once on mount to avoid hydration mismatch
-  // Reduced from 20 to 8 orbs for better performance
-  const orbs = useMemo(() => {
-    return [...Array(8)].map((_, i) => ({
-      width: Math.random() * 250 + 80,
-      height: Math.random() * 250 + 80,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      color: ['rgba(59, 130, 246, 0.15)', 'rgba(147, 51, 234, 0.15)', 'rgba(236, 72, 153, 0.15)'][i % 3],
-      xMovement: Math.random() * 80 - 40,
-      yMovement: Math.random() * 80 - 40,
-      duration: Math.random() * 5 + 8,
-    }));
+  useEffect(() => {
+    setOrbs(
+      [...Array(8)].map((_, i) => ({
+        width: Math.random() * 250 + 80,
+        height: Math.random() * 250 + 80,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        color: ['rgba(59, 130, 246, 0.15)', 'rgba(147, 51, 234, 0.15)', 'rgba(236, 72, 153, 0.15)'][i % 3],
+        xMovement: Math.random() * 80 - 40,
+        yMovement: Math.random() * 80 - 40,
+        duration: Math.random() * 5 + 8,
+      }))
+    );
   }, []);
 
   useEffect(() => {
