@@ -15,7 +15,7 @@ import { AnimatedText, AnimatedParagraph } from '@/components/AnimatedText';
 import { ThreeBackground } from '@/components/ThreeBackground';
 import { HeroScene } from '@/components/HeroScene';
 import { SkillOrbs } from '@/components/SkillOrbs';
-import { ProjectShowcase3D } from '@/components/ProjectShowcase3D';
+
 import { LoadingScreen3D } from '@/components/LoadingScreen3D';
 import { SectionDivider3D } from '@/components/SectionDivider3D';
 
@@ -28,6 +28,8 @@ interface Project {
   category: string;
   gradient: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
+  github?: string;
+  liveUrl?: string;
 }
 
 interface AiProject {
@@ -86,7 +88,9 @@ const projectsData: Project[] = [
     tech: ["Node.js", "MongoDB", "Socket.io", "AWS S3"],
     category: "Social Media",
     gradient: "from-violet-600 via-purple-600 to-fuchsia-600",
-    icon: MessageSquare
+    icon: MessageSquare,
+    github: "https://github.com/SahilIjaz/Anaya",
+    liveUrl: "https://anaya-d9z9.vercel.app/",
   },
   {
     id: 2,
@@ -95,7 +99,8 @@ const projectsData: Project[] = [
     tech: ["Next.js", "React", "Socket.io", "MongoDB"],
     category: "Social Media",
     gradient: "from-blue-600 via-cyan-600 to-teal-600",
-    icon: Globe
+    icon: Globe,
+    github: "https://github.com/SahilIjaz/Connect-Hub",
   },
   {
     id: 3,
@@ -104,7 +109,8 @@ const projectsData: Project[] = [
     tech: ["Node.js", "Express", "MongoDB", "AWS"],
     category: "Community",
     gradient: "from-emerald-600 via-green-600 to-lime-600",
-    icon: Sparkles
+    icon: Sparkles,
+    github: "https://github.com/SahilIjaz/MulberryTree",
   },
   {
     id: 4,
@@ -113,7 +119,8 @@ const projectsData: Project[] = [
     tech: ["Node.js", "Socket.io", "Weather API", "PostgreSQL"],
     category: "Community",
     gradient: "from-blue-700 via-indigo-600 to-violet-600",
-    icon: MapPin
+    icon: MapPin,
+    github: "https://github.com/SahilIjaz/FishScout",
   },
   {
     id: 5,
@@ -122,7 +129,8 @@ const projectsData: Project[] = [
     tech: ["Next.js", "React", "Node.js", "MongoDB"],
     category: "Sports",
     gradient: "from-orange-600 via-amber-600 to-yellow-600",
-    icon: Zap
+    icon: Zap,
+    github: "https://github.com/SahilIjaz/CoachMaster-Web",
   },
   {
     id: 6,
@@ -131,7 +139,8 @@ const projectsData: Project[] = [
     tech: ["Node.js", "Socket.io", "Agora", "MongoDB"],
     category: "Healthcare",
     gradient: "from-teal-600 via-cyan-600 to-sky-600",
-    icon: Server
+    icon: Server,
+    github: "https://github.com/SahilIjaz/MundoSalud",
   }
 ];
 
@@ -152,7 +161,7 @@ const aiProjectsData: AiProject[] = [
       { label: "Backend", items: ["Python", "FastAPI", "FAISS", "pdfplumber", "Claude API", "Render"] },
       { label: "Frontend", items: ["Next.js 14", "TypeScript", "Tailwind CSS", "Vercel"] },
     ],
-    liveUrl: "https://lnkd.in/dHzShMTM",
+    liveUrl: "https://study-mate-frontend-three.vercel.app",
     gradient: "from-violet-600 via-indigo-600 to-blue-600",
     accentColor: "violet",
   },
@@ -172,7 +181,7 @@ const aiProjectsData: AiProject[] = [
       { label: "Frontend", items: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"] },
       { label: "Backend", items: ["Node.js", "Express", "TypeScript", "Claude API", "Render"] },
     ],
-    liveUrl: "https://lnkd.in/d6_4aW2X",
+    liveUrl: "https://ai-resume-analyzer-sepia-tau.vercel.app",
     gradient: "from-emerald-600 via-teal-600 to-cyan-600",
     accentColor: "emerald",
     note: "API key currently suspended — demo may be unavailable.",
@@ -391,19 +400,17 @@ const Portfolio = () => {
 
                 <div className="hidden md:flex items-center gap-1">
                   {navItems.map((item) => (
-                    <motion.a
+                    <a
                       key={item}
                       href={`#${item.toLowerCase()}`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                      className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-500 ease-in-out ${
                         activeSection === item.toLowerCase()
-                          ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-blue-400 border border-blue-500/30'
-                          : 'hover:bg-white/10 text-gray-300'
+                          ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 text-blue-400 border border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.15)]'
+                          : 'hover:bg-white/10 text-gray-300 border border-transparent'
                       }`}
                     >
                       {item}
-                    </motion.a>
+                    </a>
                   ))}
                 </div>
 
@@ -610,7 +617,7 @@ const Portfolio = () => {
         <SectionDivider3D color="#3b82f6" />
 
         {/* About Section */}
-        <section id="about" className="py-24 relative">
+        <section id="about" className="py-24 md:py-32 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">
@@ -748,7 +755,7 @@ const Portfolio = () => {
         <SectionDivider3D color="#8b5cf6" />
 
         {/* Projects Section */}
-        <section id="projects" className="py-24 relative">
+        <section id="projects" className="py-24 md:py-32 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">
@@ -764,13 +771,8 @@ const Portfolio = () => {
               </div>
             </AnimatedSection>
 
-            {/* 3D Project Showcase */}
-            <FadeInSection delay={0.1}>
-              <ProjectShowcase3D />
-            </FadeInSection>
-
-            {/* Filter + traditional cards below */}
-            <div className="mt-16">
+            {/* Project cards with filter */}
+            <div>
               <FadeInSection delay={0.1}>
                 <div className="flex flex-wrap justify-center gap-3 mb-12">
                   {categories.map((category) => (
@@ -791,7 +793,7 @@ const Portfolio = () => {
                 </div>
               </FadeInSection>
 
-              <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 <AnimatePresence mode="popLayout">
                   {filteredProjects.map((project) => {
                     const Icon = project.icon;
@@ -834,22 +836,32 @@ const Portfolio = () => {
                               </div>
 
                               <div className="flex gap-4">
-                                <motion.button
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  className="flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
-                                >
-                                  <ExternalLink size={16} />
-                                  Live Demo
-                                </motion.button>
-                                <motion.button
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  className="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-300 transition-colors"
-                                >
-                                  <Github size={16} />
-                                  Code
-                                </motion.button>
+                                {project.liveUrl && (
+                                  <motion.a
+                                    href={project.liveUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                                  >
+                                    <ExternalLink size={16} />
+                                    Live Demo
+                                  </motion.a>
+                                )}
+                                {project.github && (
+                                  <motion.a
+                                    href={project.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-300 transition-colors"
+                                  >
+                                    <Github size={16} />
+                                    Code
+                                  </motion.a>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -864,7 +876,7 @@ const Portfolio = () => {
         </section>
 
         {/* AI Projects Section */}
-        <section className="py-24 relative">
+        <section className="py-24 md:py-32 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">
@@ -884,7 +896,7 @@ const Portfolio = () => {
               </div>
             </AnimatedSection>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto auto-rows-fr">
+            <div className="grid md:grid-cols-2 gap-8 md:gap-10 max-w-4xl mx-auto auto-rows-fr">
               {aiProjectsData.map((project, idx) => (
                 <FadeInSection key={project.id} delay={idx * 0.15}>
                   <Card3D
@@ -988,7 +1000,7 @@ const Portfolio = () => {
         <SectionDivider3D color="#ec4899" />
 
         {/* Services Section */}
-        <section id="services" className="py-24 relative">
+        <section id="services" className="py-24 md:py-32 relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">
@@ -1005,7 +1017,7 @@ const Portfolio = () => {
             </AnimatedSection>
 
             <StaggerChildren staggerDelay={0.08}>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                 {services.map((service, idx) => {
                   const Icon = service.icon;
                   return (
@@ -1033,7 +1045,7 @@ const Portfolio = () => {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="py-24 relative overflow-hidden">
+        <section id="contact" className="py-24 md:py-32 relative overflow-hidden">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <AnimatedSection direction="up" delay={0}>
               <div className="text-center mb-16">

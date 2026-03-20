@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import * as THREE from 'three';
@@ -223,38 +223,39 @@ function HeroCamera() {
 }
 
 export function HeroScene() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   return (
     <div className="absolute inset-0 -z-5">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 55 }}
-        dpr={[1, 2]}
+        dpr={isMobile ? [1, 1] : [1, 2]}
         gl={{
-          antialias: true,
+          antialias: !isMobile,
           alpha: true,
-          powerPreference: 'high-performance',
+          powerPreference: isMobile ? 'low-power' : 'high-performance',
         }}
         style={{ background: 'transparent' }}
+        frameloop={isMobile ? 'demand' : 'always'}
       >
-        <HeroCamera />
+        {!isMobile && <HeroCamera />}
 
-        {/* Lighting */}
         <ambientLight intensity={0.2} />
         <directionalLight position={[5, 5, 5]} color="#ffffff" intensity={0.5} />
         <pointLight position={[3, 3, 3]} color="#3b82f6" intensity={1} />
         <pointLight position={[-3, -2, 2]} color="#8b5cf6" intensity={0.8} />
-        <pointLight position={[0, 3, -3]} color="#ec4899" intensity={0.5} />
 
-        {/* Central sphere */}
         <CentralSphere />
-
-        {/* Orbital rings */}
-        <OrbitalRings />
-
-        {/* Orbiting elements */}
-        <OrbitingElements />
-
-        {/* Energy particles */}
-        <EnergyParticles count={150} />
+        {!isMobile && <OrbitalRings />}
+        {!isMobile && <OrbitingElements />}
+        <EnergyParticles count={isMobile ? 40 : 150} />
       </Canvas>
     </div>
   );

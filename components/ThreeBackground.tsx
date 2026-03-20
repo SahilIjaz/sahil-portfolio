@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Float, Stars } from '@react-three/drei';
 import * as THREE from 'three';
@@ -236,55 +236,91 @@ function ScrollCamera() {
   return null;
 }
 
+// Lightweight mobile scene - just stars and minimal particles
+function MobileScene() {
+  return (
+    <>
+      <Stars
+        radius={50}
+        depth={50}
+        count={500}
+        factor={3}
+        saturation={0}
+        fade
+        speed={0.3}
+      />
+      <ParticleField count={80} />
+      <ambientLight intensity={0.15} />
+      <pointLight position={[10, 10, 10]} color="#3b82f6" intensity={0.3} />
+    </>
+  );
+}
+
+// Full desktop scene
+function DesktopScene() {
+  return (
+    <>
+      <ScrollCamera />
+
+      <ambientLight intensity={0.15} />
+      <pointLight position={[10, 10, 10]} color="#3b82f6" intensity={0.5} />
+      <pointLight position={[-10, -10, 5]} color="#8b5cf6" intensity={0.3} />
+      <pointLight position={[0, 10, -10]} color="#ec4899" intensity={0.2} />
+
+      <Stars
+        radius={50}
+        depth={50}
+        count={2000}
+        factor={4}
+        saturation={0}
+        fade
+        speed={0.5}
+      />
+
+      <ParticleField count={400} />
+      <ConnectionLines count={120} />
+
+      <FloatingGeometry position={[-6, 3, -4]} geometry="octahedron" color="#3b82f6" speed={0.8} />
+      <FloatingGeometry position={[7, -2, -3]} geometry="icosahedron" color="#8b5cf6" speed={1.2} />
+      <FloatingGeometry position={[-4, -4, -5]} geometry="dodecahedron" color="#ec4899" speed={0.6} />
+      <FloatingGeometry position={[5, 4, -6]} geometry="tetrahedron" color="#06b6d4" speed={1} />
+      <FloatingGeometry position={[0, -6, -4]} geometry="torus" color="#3b82f6" speed={0.7} />
+      <FloatingGeometry position={[-7, 0, -7]} geometry="box" color="#8b5cf6" speed={0.9} />
+      <FloatingGeometry position={[8, 2, -8]} geometry="octahedron" color="#ec4899" speed={0.5} />
+
+      <GlowRing radius={6} color="#3b82f6" />
+      <GlowRing radius={8} color="#8b5cf6" />
+    </>
+  );
+}
+
 export function ThreeBackground() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   return (
     <div className="fixed inset-0 -z-10" style={{ background: '#030712' }}>
       <Canvas
         camera={{ position: [0, 0, 10], fov: 60 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
+        dpr={isMobile ? [1, 1] : [1, 1.5]}
+        gl={{
+          antialias: !isMobile,
+          alpha: false,
+          powerPreference: isMobile ? 'low-power' : 'high-performance',
+        }}
         style={{ background: 'transparent' }}
+        frameloop={isMobile ? 'demand' : 'always'}
       >
         <color attach="background" args={['#030712']} />
         <fog attach="fog" args={['#030712', 8, 30]} />
 
-        <ScrollCamera />
-
-        {/* Ambient lighting */}
-        <ambientLight intensity={0.15} />
-        <pointLight position={[10, 10, 10]} color="#3b82f6" intensity={0.5} />
-        <pointLight position={[-10, -10, 5]} color="#8b5cf6" intensity={0.3} />
-        <pointLight position={[0, 10, -10]} color="#ec4899" intensity={0.2} />
-
-        {/* Stars background */}
-        <Stars
-          radius={50}
-          depth={50}
-          count={2000}
-          factor={4}
-          saturation={0}
-          fade
-          speed={0.5}
-        />
-
-        {/* Interactive particle field */}
-        <ParticleField count={400} />
-
-        {/* Connection lines */}
-        <ConnectionLines count={120} />
-
-        {/* Floating geometries scattered around */}
-        <FloatingGeometry position={[-6, 3, -4]} geometry="octahedron" color="#3b82f6" speed={0.8} />
-        <FloatingGeometry position={[7, -2, -3]} geometry="icosahedron" color="#8b5cf6" speed={1.2} />
-        <FloatingGeometry position={[-4, -4, -5]} geometry="dodecahedron" color="#ec4899" speed={0.6} />
-        <FloatingGeometry position={[5, 4, -6]} geometry="tetrahedron" color="#06b6d4" speed={1} />
-        <FloatingGeometry position={[0, -6, -4]} geometry="torus" color="#3b82f6" speed={0.7} />
-        <FloatingGeometry position={[-7, 0, -7]} geometry="box" color="#8b5cf6" speed={0.9} />
-        <FloatingGeometry position={[8, 2, -8]} geometry="octahedron" color="#ec4899" speed={0.5} />
-
-        {/* Glowing rings */}
-        <GlowRing radius={6} color="#3b82f6" />
-        <GlowRing radius={8} color="#8b5cf6" />
+        {isMobile ? <MobileScene /> : <DesktopScene />}
       </Canvas>
     </div>
   );

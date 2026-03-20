@@ -1,30 +1,48 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
 
 export function AnimatedCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const trailRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
   const mousePos = useRef({ x: 0, y: 0 });
   const cursorPos = useRef({ x: 0, y: 0 });
+  const dotPos = useRef({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Disable custom cursor on mobile/touch devices
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    if (isMobile) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       mousePos.current = { x: e.clientX, y: e.clientY };
     };
 
-    // Smooth cursor following with animation frame
     const animate = () => {
-      if (!cursorRef.current) return;
+      if (!cursorRef.current || !dotRef.current) {
+        requestAnimationFrame(animate);
+        return;
+      }
 
-      // Lerp toward mouse position
-      const speed = 0.15;
-      cursorPos.current.x += (mousePos.current.x - cursorPos.current.x) * speed;
-      cursorPos.current.y += (mousePos.current.y - cursorPos.current.y) * speed;
+      // Outer ring follows with smooth lerp
+      const ringSpeed = 0.12;
+      cursorPos.current.x += (mousePos.current.x - cursorPos.current.x) * ringSpeed;
+      cursorPos.current.y += (mousePos.current.y - cursorPos.current.y) * ringSpeed;
 
-      cursorRef.current.style.left = `${cursorPos.current.x}px`;
-      cursorRef.current.style.top = `${cursorPos.current.y}px`;
+      // Inner dot follows faster
+      const dotSpeed = 0.25;
+      dotPos.current.x += (mousePos.current.x - dotPos.current.x) * dotSpeed;
+      dotPos.current.y += (mousePos.current.y - dotPos.current.y) * dotSpeed;
+
+      cursorRef.current.style.transform = `translate(${cursorPos.current.x}px, ${cursorPos.current.y}px) translate(-50%, -50%)`;
+      dotRef.current.style.transform = `translate(${dotPos.current.x}px, ${dotPos.current.y}px) translate(-50%, -50%)`;
 
       requestAnimationFrame(animate);
     };
@@ -32,70 +50,66 @@ export function AnimatedCursor() {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     const frameId = requestAnimationFrame(animate);
 
-    // Add hover effects for interactive elements
-    const handleMouseEnter = (e: MouseEvent) => {
+    // Hover detection for interactive elements
+    const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (
-        target.tagName === 'A' ||
-        target.tagName === 'BUTTON' ||
-        target.className.includes('cursor-hover')
-      ) {
-        if (cursorRef.current) {
-          cursorRef.current.classList.add('cursor-active');
-        }
+      if (target.closest('a, button, [role="button"], input, textarea, select, .cursor-hover')) {
+        setIsHovering(true);
       }
     };
 
-    const handleMouseLeave = () => {
-      if (cursorRef.current) {
-        cursorRef.current.classList.remove('cursor-active');
+    const handleMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest('a, button, [role="button"], input, textarea, select, .cursor-hover')) {
+        setIsHovering(false);
       }
     };
 
-    document.addEventListener('mouseenter', handleMouseEnter, true);
-    document.addEventListener('mouseleave', handleMouseLeave, true);
+    document.addEventListener('mouseover', handleMouseOver, { passive: true });
+    document.addEventListener('mouseout', handleMouseOut, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseenter', handleMouseEnter, true);
-      document.removeEventListener('mouseleave', handleMouseLeave, true);
+      window.removeEventListener('resize', checkMobile);
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('mouseout', handleMouseOut);
       cancelAnimationFrame(frameId);
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) return null;
 
   return (
     <>
-      {/* Cursor trail */}
+      {/* Outer ring */}
       <div
-        ref={trailRef}
-        className="pointer-events-none fixed w-1 h-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 shadow-lg opacity-0 z-[9999]"
+        ref={cursorRef}
+        className="pointer-events-none fixed top-0 left-0 z-[9999] will-change-transform"
         style={{
-          filter: 'blur(1px)',
+          width: isHovering ? '40px' : '24px',
+          height: isHovering ? '40px' : '24px',
+          borderRadius: '50%',
+          border: `2px solid ${isHovering ? 'rgba(139, 92, 246, 0.8)' : 'rgba(59, 130, 246, 0.6)'}`,
+          boxShadow: isHovering
+            ? '0 0 30px rgba(139, 92, 246, 0.5)'
+            : '0 0 15px rgba(59, 130, 246, 0.3)',
+          transition: 'width 0.3s ease, height 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
+          mixBlendMode: 'difference',
         }}
       />
 
-      {/* Main cursor */}
+      {/* Inner dot */}
       <div
-        ref={cursorRef}
-        className="pointer-events-none fixed w-5 h-5 rounded-full border-2 border-blue-500 z-[9999] transition-all duration-200"
+        ref={dotRef}
+        className="pointer-events-none fixed top-0 left-0 z-[9999] will-change-transform"
         style={{
-          transform: 'translate(-50%, -50%)',
-          boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)',
+          width: isHovering ? '6px' : '4px',
+          height: isHovering ? '6px' : '4px',
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+          transition: 'width 0.2s ease, height 0.2s ease',
         }}
-      >
-        {/* Inner dot */}
-        <div className="absolute inset-1 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
-      </div>
-
-      {/* Cursor glow (expands on hover) */}
-      <style jsx>{`
-        .cursor-active {
-          width: 2rem;
-          height: 2rem;
-          border-color: rgb(139, 92, 246);
-          box-shadow: 0 0 40px rgba(139, 92, 246, 0.8);
-        }
-      `}</style>
+      />
     </>
   );
 }

@@ -38,7 +38,7 @@ function WaveGrid({ color = '#3b82f6' }: { color?: string }) {
 
 export function SectionDivider3D({ color = '#3b82f6' }: { color?: string }) {
   return (
-    <div className="w-full h-[120px] -my-10 relative z-0">
+    <div className="hidden md:block w-full h-[120px] -my-10 relative z-0">
       <Canvas
         camera={{ position: [0, 2, 5], fov: 40 }}
         dpr={[1, 1.5]}

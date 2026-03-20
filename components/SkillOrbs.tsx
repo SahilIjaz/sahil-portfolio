@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Html, Billboard } from '@react-three/drei';
 import * as THREE from 'three';
@@ -188,6 +188,15 @@ const skillsData: SkillOrbData[] = [
 ];
 
 export function SkillOrbs() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   const orbPositions: [number, number, number][] = useMemo(() => [
     [-3.5, 2, 0],
     [-1.2, 3, -1],
@@ -200,24 +209,23 @@ export function SkillOrbs() {
   ], []);
 
   return (
-    <div className="w-full h-[500px] md:h-[600px] rounded-2xl overflow-hidden">
+    <div className="w-full h-[400px] md:h-[600px] rounded-2xl overflow-hidden">
       <Canvas
         camera={{ position: [0, 0, 10], fov: 50 }}
-        dpr={[1, 1.5]}
+        dpr={isMobile ? [1, 1] : [1, 1.5]}
         gl={{
-          antialias: true,
+          antialias: !isMobile,
           alpha: true,
-          powerPreference: 'high-performance',
+          powerPreference: isMobile ? 'low-power' : 'high-performance',
         }}
         style={{ background: 'transparent' }}
+        frameloop={isMobile ? 'demand' : 'always'}
       >
-        <OrbCamera />
+        {!isMobile && <OrbCamera />}
 
         <ambientLight intensity={0.3} />
         <pointLight position={[5, 5, 5]} color="#3b82f6" intensity={0.5} />
-        <pointLight position={[-5, -5, 3]} color="#8b5cf6" intensity={0.3} />
 
-        {/* Skill orbs */}
         {skillsData.map((skill, index) => (
           <SkillOrb
             key={skill.name}
@@ -227,8 +235,7 @@ export function SkillOrbs() {
           />
         ))}
 
-        {/* Connection lines */}
-        <OrbConnections positions={orbPositions} />
+        {!isMobile && <OrbConnections positions={orbPositions} />}
       </Canvas>
     </div>
   );
