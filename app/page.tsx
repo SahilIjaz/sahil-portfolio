@@ -111,6 +111,7 @@ const projectsData: Project[] = [
     gradient: "from-emerald-600 via-green-600 to-lime-600",
     icon: Sparkles,
     github: "https://github.com/SahilIjaz/MulberryTree",
+    liveUrl: "https://mulberry-tree.vercel.app",
   },
   {
     id: 4,
