@@ -101,6 +101,7 @@ const projectsData: Project[] = [
     gradient: "from-blue-600 via-cyan-600 to-teal-600",
     icon: Globe,
     github: "https://github.com/SahilIjaz/Connect-Hub",
+    liveUrl: "https://connect-hub-git-main-sahil-ijazs-projects.vercel.app/",
   },
   {
     id: 3,
