@@ -336,10 +336,7 @@ const Portfolio = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const categories = useMemo(
-    () => ['All', ...new Set(projectsData.map(p => p.category))],
-    []
-  );
+  const categories = ['All', 'Simple Projects', 'AI Based', 'Multi Tenant'];
 
   const filteredProjects = useMemo(
     () => activeFilter === 'All' ? projectsData : projectsData.filter(p => p.category === activeFilter),
