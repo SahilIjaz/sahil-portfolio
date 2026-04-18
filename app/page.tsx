@@ -1020,16 +1020,8 @@ const Portfolio = () => {
                       >
                         <Card3D glowColor="purple" intensity={8}>
                           <div className="h-full bg-black/30 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden group">
-                            {/* Gradient header */}
-                            <div className={`h-32 bg-gradient-to-br ${project.gradient} relative overflow-hidden`}>
-                              <div className="absolute inset-0 bg-black/20" />
-                              <div className="absolute bottom-4 left-4 flex items-center gap-3">
-                                <span className="p-3 rounded-xl bg-white/20 backdrop-blur-sm">
-                                  <Icon size={24} className="text-white" />
-                                </span>
-                                <h3 className="text-2xl font-bold text-white">{project.name}</h3>
-                              </div>
-                            </div>
+                            {/* Project Preview */}
+                            <ProjectPreview project={project} />
 
                             <div className="p-6">
                               <p className="text-gray-400 mb-4 line-clamp-2">
