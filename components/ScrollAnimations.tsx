@@ -180,4 +180,3 @@ export function ScrollOpacityAnimation({
 
   return null;
 }
-
