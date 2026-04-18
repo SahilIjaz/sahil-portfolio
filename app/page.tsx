@@ -286,6 +286,189 @@ const experience: Experience[] = [
 
 const navItems = ["About", "Projects", "Services", "Contact"];
 
+// Project Preview Component with Browser Chrome
+const ProjectPreview = ({ project }: { project: Project }) => {
+  const getPreviewContent = () => {
+    switch (project.id) {
+      // Anaya - Chat bubbles
+      case 1:
+        return (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+            <div className="w-20 h-10 rounded-2xl bg-white/20 ml-12"></div>
+            <div className="w-24 h-8 rounded-2xl bg-white/30"></div>
+            <div className="w-20 h-10 rounded-2xl bg-white/20 ml-12"></div>
+          </div>
+        );
+      // Connect Hub - Two chat panels
+      case 2:
+        return (
+          <div className="absolute inset-0 flex gap-2 p-3">
+            <div className="flex-1 space-y-2">
+              <div className="w-full h-3 rounded bg-white/20"></div>
+              <div className="w-3/4 h-3 rounded bg-white/20"></div>
+            </div>
+            <div className="flex-1 space-y-2">
+              <div className="w-3/4 h-3 rounded bg-white/30"></div>
+              <div className="w-full h-3 rounded bg-white/30"></div>
+            </div>
+          </div>
+        );
+      // MulberryTree - Recipe cards grid
+      case 3:
+        return (
+          <div className="absolute inset-0 grid grid-cols-3 gap-2 p-3">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="rounded-lg bg-white/15 backdrop-blur-sm"></div>
+            ))}
+          </div>
+        );
+      // FishScout - Map with fishing spots
+      case 4:
+        return (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="relative w-32 h-32">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-2 h-2 rounded-full bg-white/40"
+                  style={{
+                    top: `${Math.random() * 100}%`,
+                    left: `${Math.random() * 100}%`,
+                  }}
+                ></div>
+              ))}
+              <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 100 100">
+                <line x1="0" y1="50" x2="100" y2="50" stroke="white" strokeWidth="0.5" />
+                <line x1="50" y1="0" x2="50" y2="100" stroke="white" strokeWidth="0.5" />
+              </svg>
+            </div>
+          </div>
+        );
+      // CoachMaster - Soccer field
+      case 5:
+        return (
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <svg className="w-24 h-32 opacity-30" viewBox="0 0 100 150">
+              <rect x="10" y="10" width="80" height="130" fill="none" stroke="white" strokeWidth="1" />
+              <line x1="50" y1="10" x2="50" y2="140" stroke="white" strokeWidth="1" />
+              <circle cx="50" cy="75" r="8" fill="none" stroke="white" strokeWidth="1" />
+              <circle cx="50" cy="75" r="2" fill="white" />
+            </svg>
+          </div>
+        );
+      // MundoSalud - Dashboard with pulse
+      case 6:
+        return (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+            <div className="w-20 h-3 rounded-full bg-white/20"></div>
+            <div className="w-24 h-1.5 rounded-full bg-white/30"></div>
+            <svg className="w-16 h-8 opacity-40" viewBox="0 0 100 50">
+              <polyline
+                points="0,40 25,20 50,35 75,10 100,25"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+              />
+            </svg>
+          </div>
+        );
+      // StudyMate AI - PDF + neural network
+      case 7:
+        return (
+          <div className="absolute inset-0 flex items-center justify-center gap-4">
+            <div className="w-12 h-16 rounded bg-white/25 flex flex-col gap-1 p-1">
+              <div className="h-1 bg-white/40 rounded"></div>
+              <div className="h-1 bg-white/40 rounded"></div>
+              <div className="h-1 bg-white/40 rounded"></div>
+            </div>
+            <svg className="w-12 h-12 opacity-30" viewBox="0 0 50 50">
+              {[...Array(3)].map((_, i) => (
+                <circle key={i} cx={25} cy={15 + i * 10} r="2" fill="white" />
+              ))}
+              {[...Array(3)].map((_, i) => (
+                <line
+                  key={`line-${i}`}
+                  x1="25"
+                  y1="15"
+                  x2={25}
+                  y2={35 + i * 5}
+                  stroke="white"
+                  strokeWidth="0.5"
+                  opacity="0.3"
+                />
+              ))}
+            </svg>
+          </div>
+        );
+      // AI Resume Analyzer - Resume + score
+      case 8:
+        return (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-4">
+            <div className="w-16 h-20 rounded bg-white/20 flex flex-col gap-1 p-2">
+              <div className="h-1 bg-white/40 w-full rounded"></div>
+              <div className="h-0.5 bg-white/30 w-3/4 rounded"></div>
+              <div className="h-0.5 bg-white/30 w-full rounded"></div>
+            </div>
+            <div className="w-20 h-2 rounded-full bg-white/20 overflow-hidden">
+              <div className="h-full w-3/4 rounded-full bg-white/50"></div>
+            </div>
+          </div>
+        );
+      // Grocio - Multi-tenant sidebar + grid
+      case 9:
+        return (
+          <div className="absolute inset-0 flex">
+            <div className="w-8 bg-white/20 flex flex-col gap-1 p-1">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="h-1 bg-white/40 rounded"></div>
+              ))}
+            </div>
+            <div className="flex-1 grid grid-cols-3 gap-1 p-2">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="rounded bg-white/15"></div>
+              ))}
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className={`relative h-48 bg-gradient-to-br ${project.gradient} overflow-hidden group`}>
+      {/* Browser Chrome */}
+      <div className="absolute top-0 inset-x-0 h-10 bg-black/20 border-b border-white/10 flex items-center gap-2 px-3 backdrop-blur-sm">
+        <div className="flex gap-1">
+          <div className="w-2 h-2 rounded-full bg-red-400/70"></div>
+          <div className="w-2 h-2 rounded-full bg-yellow-400/70"></div>
+          <div className="w-2 h-2 rounded-full bg-green-400/70"></div>
+        </div>
+        <div className="flex-1 h-5 rounded bg-white/5 border border-white/10 ml-2 px-2 flex items-center">
+          <span className="text-xs text-gray-400/70">localhost:3000</span>
+        </div>
+      </div>
+
+      {/* Dark overlay for depth */}
+      <div className="absolute inset-0 bg-black/10" />
+
+      {/* Preview Content */}
+      <div className="absolute top-10 inset-x-0 bottom-0 flex flex-col items-center justify-center">
+        {getPreviewContent()}
+      </div>
+
+      {/* Project title overlay at bottom */}
+      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/50 to-transparent p-4 flex items-end gap-3 h-20">
+        <div className="flex-1">
+          <h3 className="text-lg font-bold text-white">{project.name}</h3>
+          <p className="text-xs text-gray-300 opacity-90">{project.category}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 const Portfolio = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
