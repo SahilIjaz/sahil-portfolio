@@ -207,7 +207,7 @@ function ConnectionLines({ count = 150 }: { count?: number }) {
   );
 }
 
-// Orbiting circles on rings
+// Orbiting circles on rings - styled like SkillOrbs
 function RingOrbiters({
   radius = 5,
   color = '#8b5cf6',
@@ -220,12 +220,30 @@ function RingOrbiters({
   labels?: string[];
 }) {
   const groupRef = useRef<THREE.Group>(null);
+  const orbRefs = useRef<(THREE.Mesh | null)[]>([]);
+  const glowRefs = useRef<(THREE.Mesh | null)[]>([]);
 
   useFrame((state) => {
     if (!groupRef.current) return;
     groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.3 + 1.2;
     groupRef.current.rotation.z = state.clock.elapsedTime * 0.1;
+
+    // Animate individual orbs
+    orbRefs.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      mesh.rotation.y = state.clock.elapsedTime * 0.3 + i;
+      mesh.rotation.x = Math.sin(state.clock.elapsedTime * 0.2 + i) * 0.3;
+    });
+
+    // Pulse glow effect
+    glowRefs.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      const scale = 1 + Math.sin(state.clock.elapsedTime * 2 + i * 0.5) * 0.1;
+      mesh.scale.setScalar(scale);
+    });
   });
+
+  const orbSize = 0.15;
 
   return (
     <group ref={groupRef} position={[0, 0, -3]}>
@@ -235,12 +253,67 @@ function RingOrbiters({
         const z = Math.sin(angle) * radius;
         return (
           <group key={i} position={[x, 0, z]}>
-            <mesh>
-              <sphereGeometry args={[0.15, 16, 16]} />
-              <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.6} />
+            {/* Glow sphere */}
+            <mesh
+              ref={(el) => {
+                glowRefs.current[i] = el;
+              }}
+            >
+              <sphereGeometry args={[orbSize * 1.5, 16, 16]} />
+              <meshBasicMaterial
+                color={color}
+                transparent
+                opacity={0.08}
+                side={THREE.BackSide}
+              />
             </mesh>
-            <Html position={[0, 0, 0]} scale={1} distanceFactor={1}>
-              <div className="text-xs font-bold text-white bg-black/50 px-2 py-1 rounded-lg whitespace-nowrap pointer-events-none backdrop-blur-sm">
+
+            {/* Main icosahedron orb */}
+            <mesh
+              ref={(el) => {
+                orbRefs.current[i] = el;
+              }}
+            >
+              <icosahedronGeometry args={[orbSize, 1]} />
+              <meshStandardMaterial
+                color={color}
+                emissive={color}
+                emissiveIntensity={0.4}
+                wireframe
+                transparent
+                opacity={0.6}
+              />
+            </mesh>
+
+            {/* Inner solid core */}
+            <mesh>
+              <sphereGeometry args={[orbSize * 0.4, 16, 16]} />
+              <meshStandardMaterial
+                color={color}
+                emissive={color}
+                emissiveIntensity={0.8}
+                transparent
+                opacity={0.8}
+              />
+            </mesh>
+
+            {/* Orbit ring */}
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <torusGeometry args={[orbSize * 1.3, 0.008, 8, 64]} />
+              <meshBasicMaterial color={color} transparent opacity={0.3} />
+            </mesh>
+
+            {/* Label */}
+            <Html position={[0, 0, 0]} scale={0.5} distanceFactor={8}>
+              <div
+                className="text-xs font-bold px-2 py-0.5 rounded-full backdrop-blur-sm whitespace-nowrap pointer-events-none"
+                style={{
+                  color: color,
+                  background: 'rgba(0,0,0,0.5)',
+                  border: `1px solid ${color}40`,
+                  textShadow: `0 0 10px ${color}`,
+                }}
+              >
                 {labels[i % labels.length]}
               </div>
             </Html>
