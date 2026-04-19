@@ -69,18 +69,18 @@ function SkillBadge({ skill }: { skill: { name: string; icon: React.ComponentTyp
   );
 }
 
-// Orbiting elements around the hero (now skill-based)
+// Orbiting elements around the hero (Solar system style)
 function OrbitingElements() {
   const groupRef = useRef<THREE.Group>(null);
 
   const skills = useMemo(() => [
-    { name: 'Node.js', icon: Terminal, color: '#22c55e' },
-    { name: 'Next.js', icon: Globe, color: '#ffffff' },
-    { name: 'React', icon: Code2, color: '#61dafb' },
-    { name: 'MongoDB', icon: Database, color: '#13aa52' },
-    { name: 'PostgreSQL', icon: Database, color: '#336791' },
-    { name: 'AWS', icon: Cloud, color: '#ff9900' },
-    { name: 'Socket.io', icon: Zap, color: '#010101' },
+    { name: 'Node.js', icon: Terminal, color: '#22c55e', orbitRadius: 3, speed: 0.8, yOsc: 0.2 },
+    { name: 'Next.js', icon: Globe, color: '#ffffff', orbitRadius: 3.8, speed: 0.6, yOsc: 0.15 },
+    { name: 'React', icon: Code2, color: '#61dafb', orbitRadius: 4.6, speed: 0.5, yOsc: 0.25 },
+    { name: 'MongoDB', icon: Database, color: '#13aa52', orbitRadius: 5.4, speed: 0.4, yOsc: 0.18 },
+    { name: 'PostgreSQL', icon: Database, color: '#336791', orbitRadius: 6.2, speed: 0.35, yOsc: 0.2 },
+    { name: 'AWS', icon: Cloud, color: '#ff9900', orbitRadius: 7, speed: 0.3, yOsc: 0.22 },
+    { name: 'Socket.io', icon: Zap, color: '#010101', orbitRadius: 7.8, speed: 0.25, yOsc: 0.19 },
   ], []);
 
   const positions = useRef<Array<{ x: number; y: number; z: number }>>(
@@ -88,17 +88,15 @@ function OrbitingElements() {
   );
 
   useFrame((state) => {
-    const radius = 4.5;
-    const numSkills = skills.length;
-    
     skills.forEach((skill, i) => {
-      // Evenly distribute skills around a circle
-      const angle = (i / numSkills) * Math.PI * 2 + state.clock.elapsedTime * 0.3;
+      // Each skill has its own orbital radius and speed (like planets)
+      const angle = state.clock.elapsedTime * skill.speed;
+      const baseY = Math.sin(state.clock.elapsedTime * 0.3 + i * 0.5) * skill.yOsc;
       
       positions.current[i] = {
-        x: Math.cos(angle) * radius,
-        z: Math.sin(angle) * radius,
-        y: Math.sin(state.clock.elapsedTime * 0.5 + i * 0.2) * 0.4,
+        x: Math.cos(angle) * skill.orbitRadius,
+        z: Math.sin(angle) * skill.orbitRadius,
+        y: baseY,
       };
     });
   });
