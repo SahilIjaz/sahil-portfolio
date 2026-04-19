@@ -303,17 +303,18 @@ function RingOrbiters({
               <meshBasicMaterial color={color} transparent opacity={0.3} />
             </mesh>
 
-            {/* Label */}
-            <Html position={[0, 0.4, 0]} scale={4} distanceFactor={0.5}>
+            {/* Label - positioned away from orb for readability */}
+            <Html position={[0, 0.6, 0]} scale={1} distanceFactor={20} occlude="blending">
               <div
-                className="font-bold px-4 py-2 rounded-xl whitespace-nowrap pointer-events-none"
+                className="font-bold px-5 py-3 rounded-lg whitespace-nowrap pointer-events-none"
                 style={{
                   color: '#ffffff',
                   background: color,
-                  fontSize: '14px',
-                  textShadow: `0 2px 4px rgba(0,0,0,0.8)`,
-                  boxShadow: `0 0 20px ${color}`,
-                  fontWeight: 'bold',
+                  fontSize: '16px',
+                  fontWeight: '800',
+                  textShadow: `0 2px 8px rgba(0,0,0,0.9)`,
+                  boxShadow: `0 0 25px ${color}, 0 0 40px ${color}`,
+                  letterSpacing: '0.5px',
                 }}
               >
                 {labels[i % labels.length]}
