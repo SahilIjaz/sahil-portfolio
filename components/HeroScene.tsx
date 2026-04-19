@@ -2,8 +2,9 @@
 
 import React, { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
+import { Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
+import { Terminal, Globe, Code2, Database, Cloud, Zap } from 'lucide-react';
 
 // Central morphing sphere
 function CentralSphere() {
@@ -34,46 +35,75 @@ function CentralSphere() {
   );
 }
 
-// Orbiting elements around the hero
+// Skill badge component
+function SkillBadge({ skill }: { skill: { name: string; icon: React.ComponentType<any>; color: string } }) {
+  const Icon = skill.icon;
+  const [hovered, setHovered] = React.useState(false);
+
+  return (
+    <div
+      className="flex flex-col items-center gap-1 cursor-pointer transition-all"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div
+        className={`relative p-3 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+          hovered
+            ? 'bg-white/30 shadow-lg scale-110'
+            : 'bg-white/10 shadow-md'
+        }`}
+        style={{
+          boxShadow: hovered ? `0 0 20px ${skill.color}80` : 'none',
+        }}
+      >
+        <Icon size={20} style={{ color: skill.color }} className="drop-shadow-lg" />
+      </div>
+      {hovered && (
+        <span
+          className="text-xs font-semibold px-2 py-1 rounded bg-black/70 text-white whitespace-nowrap transition-opacity"
+        >
+          {skill.name}
+        </span>
+      )}
+    </div>
+  );
+}
+
+// Orbiting elements around the hero (now skill-based)
 function OrbitingElements() {
   const groupRef = useRef<THREE.Group>(null);
 
-  const elements = useMemo(() => [
-    { radius: 4, speed: 0.3, size: 0.3, color: '#8b5cf6', offset: 0, yOsc: 0.5 },
-    { radius: 4, speed: 0.3, size: 0.25, color: '#ec4899', offset: Math.PI * 0.66, yOsc: 0.3 },
-    { radius: 4, speed: 0.3, size: 0.35, color: '#06b6d4', offset: Math.PI * 1.33, yOsc: 0.4 },
-    { radius: 5.5, speed: -0.2, size: 0.2, color: '#3b82f6', offset: 0, yOsc: 0.8 },
-    { radius: 5.5, speed: -0.2, size: 0.2, color: '#8b5cf6', offset: Math.PI, yOsc: 0.6 },
-    { radius: 3, speed: 0.5, size: 0.15, color: '#ec4899', offset: Math.PI * 0.5, yOsc: 0.3 },
-    { radius: 3, speed: 0.5, size: 0.15, color: '#06b6d4', offset: Math.PI * 1.5, yOsc: 0.2 },
+  const skills = useMemo(() => [
+    { name: 'Node.js', icon: Terminal, color: '#22c55e', radius: 4, speed: 0.3, offset: 0, yOsc: 0.5 },
+    { name: 'Next.js', icon: Globe, color: '#ffffff', radius: 4, speed: 0.3, offset: Math.PI * 0.66, yOsc: 0.3 },
+    { name: 'React', icon: Code2, color: '#61dafb', radius: 4, speed: 0.3, offset: Math.PI * 1.33, yOsc: 0.4 },
+    { name: 'MongoDB', icon: Database, color: '#13aa52', radius: 5.5, speed: -0.2, offset: 0, yOsc: 0.8 },
+    { name: 'PostgreSQL', icon: Database, color: '#336791', radius: 5.5, speed: -0.2, offset: Math.PI, yOsc: 0.6 },
+    { name: 'AWS', icon: Cloud, color: '#ff9900', radius: 3, speed: 0.5, offset: Math.PI * 0.5, yOsc: 0.3 },
+    { name: 'Socket.io', icon: Zap, color: '#010101', radius: 3, speed: 0.5, offset: Math.PI * 1.5, yOsc: 0.2 },
   ], []);
 
+  const positions = useRef<Array<{ x: number; y: number; z: number }>>(
+    skills.map(() => ({ x: 0, y: 0, z: 0 }))
+  );
+
   useFrame((state) => {
-    if (!groupRef.current) return;
-    groupRef.current.children.forEach((child, i) => {
-      const el = elements[i];
-      const angle = state.clock.elapsedTime * el.speed + el.offset;
-      child.position.x = Math.cos(angle) * el.radius;
-      child.position.z = Math.sin(angle) * el.radius;
-      child.position.y = Math.sin(state.clock.elapsedTime * 0.5 + el.offset) * el.yOsc;
-      child.rotation.x += 0.01;
-      child.rotation.y += 0.015;
+    skills.forEach((skill, i) => {
+      const angle = state.clock.elapsedTime * skill.speed + skill.offset;
+      positions.current[i] = {
+        x: Math.cos(angle) * skill.radius,
+        z: Math.sin(angle) * skill.radius,
+        y: Math.sin(state.clock.elapsedTime * 0.5 + skill.offset) * skill.yOsc,
+      };
     });
   });
 
   return (
     <group ref={groupRef}>
-      {elements.map((el, i) => (
-        <mesh key={i}>
-          <octahedronGeometry args={[el.size]} />
-          <meshStandardMaterial
-            color={el.color}
-            emissive={el.color}
-            emissiveIntensity={0.5}
-            transparent
-            opacity={0.6}
-          />
-        </mesh>
+      {skills.map((skill, i) => (
+        <Html key={i} position={[positions.current[i].x, positions.current[i].y, positions.current[i].z]} scale={1}>
+          <SkillBadge skill={skill} />
+        </Html>
       ))}
     </group>
   );
