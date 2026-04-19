@@ -273,7 +273,7 @@ export function HeroScene() {
           powerPreference: isMobile ? 'low-power' : 'high-performance',
         }}
         style={{ background: 'transparent' }}
-        frameloop={isMobile ? 'demand' : 'always'}
+        frameloop='always'
       >
         {!isMobile && <HeroCamera />}
 
@@ -284,7 +284,7 @@ export function HeroScene() {
 
         <CentralSphere />
         {!isMobile && <OrbitalRings />}
-        {!isMobile && <OrbitingElements />}
+        <OrbitingElements />
         <EnergyParticles count={isMobile ? 40 : 150} />
       </Canvas>
     </div>
