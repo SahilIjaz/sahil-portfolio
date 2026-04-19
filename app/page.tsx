@@ -13,7 +13,6 @@ import { AnimatedSection, FadeInSection, StaggerChildren, itemVariants } from '@
 import { AnimatedCursor } from '@/components/AnimatedCursor';
 import { AnimatedText, AnimatedParagraph } from '@/components/AnimatedText';
 import { ThreeBackground } from '@/components/ThreeBackground';
-import { HeroScene } from '@/components/HeroScene';
 import { SkillOrbs } from '@/components/SkillOrbs';
 
 import { LoadingScreen3D } from '@/components/LoadingScreen3D';
@@ -685,7 +684,6 @@ const Portfolio = () => {
         {/* Hero Section with 3D Scene */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
           {/* 3D Hero Scene behind text */}
-          <HeroScene />
 
           <motion.div
             style={{ y: yBg }}
