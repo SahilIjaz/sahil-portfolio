@@ -74,13 +74,13 @@ function OrbitingElements() {
   const groupRef = useRef<THREE.Group>(null);
 
   const skills = useMemo(() => [
-    { name: 'Node.js', icon: Terminal, color: '#22c55e', radius: 4, speed: 0.3, offset: 0, yOsc: 0.5 },
-    { name: 'Next.js', icon: Globe, color: '#ffffff', radius: 4, speed: 0.3, offset: Math.PI * 0.66, yOsc: 0.3 },
-    { name: 'React', icon: Code2, color: '#61dafb', radius: 4, speed: 0.3, offset: Math.PI * 1.33, yOsc: 0.4 },
-    { name: 'MongoDB', icon: Database, color: '#13aa52', radius: 5.5, speed: -0.2, offset: 0, yOsc: 0.8 },
-    { name: 'PostgreSQL', icon: Database, color: '#336791', radius: 5.5, speed: -0.2, offset: Math.PI, yOsc: 0.6 },
-    { name: 'AWS', icon: Cloud, color: '#ff9900', radius: 3, speed: 0.5, offset: Math.PI * 0.5, yOsc: 0.3 },
-    { name: 'Socket.io', icon: Zap, color: '#010101', radius: 3, speed: 0.5, offset: Math.PI * 1.5, yOsc: 0.2 },
+    { name: 'Node.js', icon: Terminal, color: '#22c55e' },
+    { name: 'Next.js', icon: Globe, color: '#ffffff' },
+    { name: 'React', icon: Code2, color: '#61dafb' },
+    { name: 'MongoDB', icon: Database, color: '#13aa52' },
+    { name: 'PostgreSQL', icon: Database, color: '#336791' },
+    { name: 'AWS', icon: Cloud, color: '#ff9900' },
+    { name: 'Socket.io', icon: Zap, color: '#010101' },
   ], []);
 
   const positions = useRef<Array<{ x: number; y: number; z: number }>>(
@@ -88,12 +88,17 @@ function OrbitingElements() {
   );
 
   useFrame((state) => {
+    const radius = 4.5;
+    const numSkills = skills.length;
+    
     skills.forEach((skill, i) => {
-      const angle = state.clock.elapsedTime * skill.speed + skill.offset;
+      // Evenly distribute skills around a circle
+      const angle = (i / numSkills) * Math.PI * 2 + state.clock.elapsedTime * 0.3;
+      
       positions.current[i] = {
-        x: Math.cos(angle) * skill.radius,
-        z: Math.sin(angle) * skill.radius,
-        y: Math.sin(state.clock.elapsedTime * 0.5 + skill.offset) * skill.yOsc,
+        x: Math.cos(angle) * radius,
+        z: Math.sin(angle) * radius,
+        y: Math.sin(state.clock.elapsedTime * 0.5 + i * 0.2) * 0.4,
       };
     });
   });
