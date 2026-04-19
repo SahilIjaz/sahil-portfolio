@@ -207,6 +207,33 @@ function ConnectionLines({ count = 150 }: { count?: number }) {
   );
 }
 
+// Orbiting circles on rings
+function RingOrbiters({ radius = 5, color = '#8b5cf6', count = 5 }: { radius?: number; color?: string; count?: number }) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.3 + 1.2;
+    groupRef.current.rotation.z = state.clock.elapsedTime * 0.1;
+  });
+
+  return (
+    <group ref={groupRef} position={[0, 0, -3]}>
+      {Array.from({ length: count }).map((_, i) => {
+        const angle = (i / count) * Math.PI * 2;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        return (
+          <mesh key={i} position={[x, 0, z]}>
+            <sphereGeometry args={[0.15, 16, 16]} />
+            <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.6} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
 // Glowing ring
 function GlowRing({ radius = 5, color = '#8b5cf6' }: { radius?: number; color?: string }) {
   const ringRef = useRef<THREE.Mesh>(null);
@@ -289,7 +316,9 @@ function DesktopScene() {
       <FloatingGeometry position={[8, 2, -8]} geometry="octahedron" color="#ec4899" speed={0.5} />
 
       <GlowRing radius={6} color="#3b82f6" />
+      <RingOrbiters radius={6} color="#3b82f6" count={5} />
       <GlowRing radius={8} color="#8b5cf6" />
+      <RingOrbiters radius={8} color="#8b5cf6" count={4} />
     </>
   );
 }
