@@ -304,14 +304,15 @@ function RingOrbiters({
             </mesh>
 
             {/* Label */}
-            <Html position={[0, 0, 0]} scale={0.5} distanceFactor={8}>
+            <Html position={[0, 0, 0.5]} scale={1.5} distanceFactor={1}>
               <div
-                className="text-xs font-bold px-2 py-0.5 rounded-full backdrop-blur-sm whitespace-nowrap pointer-events-none"
+                className="text-sm font-bold px-3 py-1.5 rounded-lg backdrop-blur-md whitespace-nowrap pointer-events-none"
                 style={{
-                  color: color,
-                  background: 'rgba(0,0,0,0.5)',
-                  border: `1px solid ${color}40`,
-                  textShadow: `0 0 10px ${color}`,
+                  color: '#ffffff',
+                  background: `${color}dd`,
+                  border: `1.5px solid ${color}`,
+                  textShadow: `0 0 8px rgba(0,0,0,0.8)`,
+                  boxShadow: `0 0 15px ${color}80`,
                 }}
               >
                 {labels[i % labels.length]}
