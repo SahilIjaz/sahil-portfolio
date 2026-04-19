@@ -626,24 +626,6 @@ const Portfolio = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <MagneticButton>
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={toggleDarkMode}
-                      className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors border border-white/10"
-                      aria-label="Toggle dark mode"
-                    >
-                      <motion.div
-                        initial={false}
-                        animate={{ rotate: darkMode ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-                      </motion.div>
-                    </motion.button>
-                  </MagneticButton>
-
                   <button
                     onClick={toggleMobileMenu}
                     className="md:hidden p-2.5 rounded-xl bg-white/10 border border-white/10"
