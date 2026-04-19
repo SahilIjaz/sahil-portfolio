@@ -6,34 +6,7 @@ import { Float, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { Terminal, Globe, Code2, Database, Cloud, Zap } from 'lucide-react';
 
-// Central morphing sphere
-function CentralSphere() {
-  const meshRef = useRef<THREE.Mesh>(null);
 
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.2;
-    meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.3) * 0.2;
-    const scale = 1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.05;
-    meshRef.current.scale.setScalar(scale);
-  });
-
-  return (
-    <Float speed={2} rotationIntensity={0.4} floatIntensity={0.6}>
-      <mesh ref={meshRef}>
-        <icosahedronGeometry args={[2.2, 1]} />
-        <meshStandardMaterial
-          color="#3b82f6"
-          emissive="#1e40af"
-          emissiveIntensity={0.4}
-          wireframe
-          transparent
-          opacity={0.3}
-        />
-      </mesh>
-    </Float>
-  );
-}
 
 // Skill badge component
 function SkillBadge({ skill }: { skill: { name: string; icon: React.ComponentType<any>; color: string } }) {
@@ -69,18 +42,24 @@ function SkillBadge({ skill }: { skill: { name: string; icon: React.ComponentTyp
   );
 }
 
-// Orbiting elements around the hero (Solar system style)
+// Solar System with concentric orbital rings
 function OrbitingElements() {
   const groupRef = useRef<THREE.Group>(null);
 
+  // Skills organized into rings: Inner (2), Middle (3), Outer (2)
   const skills = useMemo(() => [
-    { name: 'Node.js', icon: Terminal, color: '#22c55e', orbitRadius: 3, speed: 0.8, yOsc: 0.2 },
-    { name: 'Next.js', icon: Globe, color: '#ffffff', orbitRadius: 3.8, speed: 0.6, yOsc: 0.15 },
-    { name: 'React', icon: Code2, color: '#61dafb', orbitRadius: 4.6, speed: 0.5, yOsc: 0.25 },
-    { name: 'MongoDB', icon: Database, color: '#13aa52', orbitRadius: 5.4, speed: 0.4, yOsc: 0.18 },
-    { name: 'PostgreSQL', icon: Database, color: '#336791', orbitRadius: 6.2, speed: 0.35, yOsc: 0.2 },
-    { name: 'AWS', icon: Cloud, color: '#ff9900', orbitRadius: 7, speed: 0.3, yOsc: 0.22 },
-    { name: 'Socket.io', icon: Zap, color: '#010101', orbitRadius: 7.8, speed: 0.25, yOsc: 0.19 },
+    // Inner ring (radius 3) - fastest speeds
+    { name: 'Node.js', icon: Terminal, color: '#22c55e', ring: 'inner', orbitRadius: 3, speed: 1.2 },
+    { name: 'React', icon: Code2, color: '#61dafb', ring: 'inner', orbitRadius: 3, speed: 1.0 },
+    
+    // Middle ring (radius 5) - medium speeds
+    { name: 'Next.js', icon: Globe, color: '#ffffff', ring: 'middle', orbitRadius: 5, speed: 0.7 },
+    { name: 'MongoDB', icon: Database, color: '#13aa52', ring: 'middle', orbitRadius: 5, speed: 0.6 },
+    { name: 'PostgreSQL', icon: Database, color: '#336791', ring: 'middle', orbitRadius: 5, speed: 0.5 },
+    
+    // Outer ring (radius 7.5) - slowest speeds
+    { name: 'AWS', icon: Cloud, color: '#ff9900', ring: 'outer', orbitRadius: 7.5, speed: 0.35 },
+    { name: 'Socket.io', icon: Zap, color: '#010101', ring: 'outer', orbitRadius: 7.5, speed: 0.25 },
   ], []);
 
   const positions = useRef<Array<{ x: number; y: number; z: number }>>(
@@ -89,14 +68,13 @@ function OrbitingElements() {
 
   useFrame((state) => {
     skills.forEach((skill, i) => {
-      // Each skill has its own orbital radius and speed (like planets)
+      // Each skill moves independently at its own speed, all clockwise
       const angle = state.clock.elapsedTime * skill.speed;
-      const baseY = Math.sin(state.clock.elapsedTime * 0.3 + i * 0.5) * skill.yOsc;
       
       positions.current[i] = {
         x: Math.cos(angle) * skill.orbitRadius,
         z: Math.sin(angle) * skill.orbitRadius,
-        y: baseY,
+        y: 0, // Fixed Y, no bobbing
       };
     });
   });
@@ -109,6 +87,87 @@ function OrbitingElements() {
         </Html>
       ))}
     </group>
+  );
+}
+
+// Glowing orbital rings
+function SolarSystemRings() {
+  const ring1Ref = useRef<THREE.Mesh>(null);
+  const ring2Ref = useRef<THREE.Mesh>(null);
+  const ring3Ref = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    // Inner ring
+    if (ring1Ref.current) {
+      ring1Ref.current.rotation.x = Math.PI / 2.5;
+    }
+    // Middle ring
+    if (ring2Ref.current) {
+      ring2Ref.current.rotation.x = Math.PI / 2.5;
+    }
+    // Outer ring
+    if (ring3Ref.current) {
+      ring3Ref.current.rotation.x = Math.PI / 2.5;
+    }
+  });
+
+  return (
+    <>
+      {/* Inner ring */}
+      <mesh ref={ring1Ref}>
+        <torusGeometry args={[3, 0.02, 32, 100]} />
+        <meshBasicMaterial color="#3b82f6" transparent opacity={0.25} />
+      </mesh>
+      {/* Middle ring */}
+      <mesh ref={ring2Ref}>
+        <torusGeometry args={[5, 0.015, 32, 100]} />
+        <meshBasicMaterial color="#8b5cf6" transparent opacity={0.2} />
+      </mesh>
+      {/* Outer ring */}
+      <mesh ref={ring3Ref}>
+        <torusGeometry args={[7.5, 0.01, 32, 100]} />
+        <meshBasicMaterial color="#ec4899" transparent opacity={0.15} />
+      </mesh>
+    </>
+  );
+}
+
+// Central sun (name glow)
+function CentralSun() {
+  const sunRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (!sunRef.current) return;
+    // Subtle pulse effect
+    const scale = 1 + Math.sin(state.clock.elapsedTime * 1.5) * 0.1;
+    sunRef.current.scale.setScalar(scale);
+  });
+
+  return (
+    <>
+      {/* Outer glow sphere */}
+      <mesh ref={sunRef}>
+        <sphereGeometry args={[1.5, 32, 32]} />
+        <meshBasicMaterial
+          color="#fbbf24"
+          transparent
+          opacity={0.15}
+          emissive="#fbbf24"
+          emissiveIntensity={0.5}
+        />
+      </mesh>
+      {/* Core sphere */}
+      <mesh>
+        <sphereGeometry args={[0.8, 32, 32]} />
+        <meshStandardMaterial
+          color="#fbbf24"
+          emissive="#f59e0b"
+          emissiveIntensity={0.8}
+          transparent
+          opacity={0.6}
+        />
+      </mesh>
+    </>
   );
 }
 
@@ -285,8 +344,8 @@ export function HeroScene() {
         <pointLight position={[3, 3, 3]} color="#3b82f6" intensity={1} />
         <pointLight position={[-3, -2, 2]} color="#8b5cf6" intensity={0.8} />
 
-        <CentralSphere />
-        {!isMobile && <OrbitalRings />}
+        <CentralSun />
+        {!isMobile && <SolarSystemRings />}
         <OrbitingElements />
         <EnergyParticles count={isMobile ? 40 : 150} />
       </Canvas>
