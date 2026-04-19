@@ -148,7 +148,7 @@ function CentralSun() {
       {/* Outer glow sphere */}
       <mesh ref={sunRef}>
         <sphereGeometry args={[1.5, 32, 32]} />
-        <meshBasicMaterial
+        <meshStandardMaterial
           color="#fbbf24"
           transparent
           opacity={0.15}
