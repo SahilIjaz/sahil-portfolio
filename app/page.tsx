@@ -172,6 +172,27 @@ const projectsData: Project[] = [
     gradient: "from-green-600 via-teal-600 to-emerald-600",
     icon: Building2,
     liveUrl: "https://grocio-app-frontend.netlify.app/",
+  },
+  {
+    id: 10,
+    name: "MulberryTree Mobile",
+    description: "Community cooking app for chefs, users, and farmers. Share recipes, discover courses, and connect with local food enthusiasts.",
+    tech: ["React Native", "Node.js", "MongoDB", "AWS"],
+    category: "Simple Projects",
+    gradient: "from-emerald-600 via-green-600 to-lime-600",
+    icon: Sparkles,
+    liveUrl: "https://play.google.com/store/apps/details?id=com.mulberry_tree",
+    github: "https://apps.apple.com/us/app/mulberry-tree-cooking/id6746870204",
+  },
+  {
+    id: 11,
+    name: "MundoSalud Mobile",
+    description: "Telehealth mobile application for real-time doctor consultations, appointment scheduling, and healthcare management.",
+    tech: ["React Native", "Node.js", "Socket.io", "MongoDB"],
+    category: "Simple Projects",
+    gradient: "from-teal-600 via-cyan-600 to-sky-600",
+    icon: Server,
+    liveUrl: "https://play.google.com/store/apps/details?id=com.app.mundoSalud",
   }
 ];
 
