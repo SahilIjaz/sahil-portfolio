@@ -104,7 +104,7 @@ const projectsData: Project[] = [
   },
   {
     id: 3,
-    name: "MulberryTree",
+    name: "MulberryTree Web",
     description: "Community platform for chefs, users, and farmers to share recipes, courses, and event announcements.",
     tech: ["Node.js", "Express", "MongoDB", "AWS"],
     category: "Simple Projects",
