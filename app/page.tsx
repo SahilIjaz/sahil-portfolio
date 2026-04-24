@@ -1052,7 +1052,20 @@ const Portfolio = () => {
                                     className="flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
                                   >
                                     <ExternalLink size={16} />
-                                    Live Demo
+                                    {project.category === 'Mobile Apps' ? 'Play Store' : 'Live Demo'}
+                                  </motion.a>
+                                )}
+                                {project.appStoreUrl && (
+                                  <motion.a
+                                    href={project.appStoreUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+                                  >
+                                    <ExternalLink size={16} />
+                                    App Store
                                   </motion.a>
                                 )}
                                 {project.github && (
