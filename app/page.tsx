@@ -175,10 +175,10 @@ const projectsData: Project[] = [
   },
   {
     id: 10,
-    name: "MulberryTree Mobile",
-    description: "Community cooking app for chefs, users, and farmers. Share recipes, discover courses, and connect with local food enthusiasts.",
+    name: "MulberryTree",
+    description: "Community cooking app for chefs, users, and farmers. Share recipes, discover courses, and connect with local food enthusiasts. Available on both iOS and Android.",
     tech: ["React Native", "Node.js", "MongoDB", "AWS"],
-    category: "Simple Projects",
+    category: "Mobile Apps",
     gradient: "from-emerald-600 via-green-600 to-lime-600",
     icon: Sparkles,
     liveUrl: "https://play.google.com/store/apps/details?id=com.mulberry_tree",
@@ -186,10 +186,10 @@ const projectsData: Project[] = [
   },
   {
     id: 11,
-    name: "MundoSalud Mobile",
-    description: "Telehealth mobile application for real-time doctor consultations, appointment scheduling, and healthcare management.",
+    name: "MundoSalud",
+    description: "Telehealth mobile application for real-time doctor consultations, appointment scheduling, and comprehensive healthcare management.",
     tech: ["React Native", "Node.js", "Socket.io", "MongoDB"],
-    category: "Simple Projects",
+    category: "Mobile Apps",
     gradient: "from-teal-600 via-cyan-600 to-sky-600",
     icon: Server,
     liveUrl: "https://play.google.com/store/apps/details?id=com.app.mundoSalud",
@@ -539,7 +539,7 @@ const Portfolio = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const categories = ['All', 'Simple Projects', 'AI Based', 'Multi Tenant'];
+  const categories = ['All', 'Simple Projects', 'AI Based', 'Multi Tenant', 'Mobile Apps'];
 
   const filteredProjects = useMemo(
     () => activeFilter === 'All' ? projectsData : projectsData.filter(p => p.category === activeFilter),
