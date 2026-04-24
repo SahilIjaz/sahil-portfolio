@@ -183,7 +183,7 @@ const projectsData: Project[] = [
     gradient: "from-emerald-600 via-green-600 to-lime-600",
     icon: Sparkles,
     liveUrl: "https://play.google.com/store/apps/details?id=com.mulberry_tree",
-    github: "https://apps.apple.com/us/app/mulberry-tree-cooking/id6746870204",
+    appStoreUrl: "https://apps.apple.com/us/app/mulberry-tree-cooking/id6746870204",
   },
   {
     id: 11,
