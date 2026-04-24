@@ -29,6 +29,7 @@ interface Project {
   icon: React.ComponentType<{ size?: number; className?: string }>;
   github?: string;
   liveUrl?: string;
+  appStoreUrl?: string;
 }
 
 interface AiProject {
