@@ -135,7 +135,7 @@ const projectsData: Project[] = [
   },
   {
     id: 6,
-    name: "MundoSalud",
+    name: "MundoSalud Web",
     description: "Telehealth platform enabling real-time doctor consultations, appointment scheduling, and admin controls.",
     tech: ["Node.js", "Socket.io", "Agora", "MongoDB"],
     category: "Simple Projects",
