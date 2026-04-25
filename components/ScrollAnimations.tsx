@@ -8,6 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 
 
+
+
 export function useScrollAnimation(
   triggerSelector: string,
   callback: (progress: number) => void,
