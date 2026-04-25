@@ -13,7 +13,7 @@ export function useScrollAnimation(
     start?: string;
     end?: string;
     scrub?: boolean | number;
-  
+
     markers?: boolean;
   }
 ) {
