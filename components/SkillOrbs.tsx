@@ -240,3 +240,4 @@ export function SkillOrbs() {
     </div>
   );
 }
+// Performance optimization
