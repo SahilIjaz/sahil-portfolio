@@ -53,7 +53,6 @@ async function isFileTooLarge(filePath: string): Promise<boolean> {
   }
 }
 
-
 // Helper: Format file path for display
 function formatPath(filePath: string): string {
   return path.relative(projectPath, filePath);
