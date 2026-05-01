@@ -1308,3 +1308,4 @@ const Portfolio = () => {
 };
 
 export default Portfolio;
+// Type fix
