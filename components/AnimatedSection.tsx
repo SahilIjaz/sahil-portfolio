@@ -140,3 +140,4 @@ export const itemVariants: Variants = {
     },
   },
 };
+/* Dark mode support */
