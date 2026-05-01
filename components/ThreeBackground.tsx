@@ -457,3 +457,4 @@ export function ThreeBackground() {
     </div>
   );
 }
+// Mobile fix
