@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio Redesign Spec — Sahil Ijaz</title>
+</head>
+<body>
+<style>
+  :root {
+    --bg: #f1f0ec;
+    --surface: #e9e7e1;
+    --ink: #1c1e21;
+    --muted: #5c5f66;
+    --line: #d5d3cb;
+    --accent: #c23b2e;
+    --accent-soft: rgba(194, 59, 46, 0.08);
+    --wf-fill: #e2e0d8;
+    --wf-line: #b9b6ac;
+    --good: #2e6e4e;
+    --sans: "Helvetica Neue", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181d;
+      --surface: #1d2026;
+      --ink: #e8e6e1;
+      --muted: #999da6;
+      --line: #2c2f36;
+      --accent: #e05a48;
+      --accent-soft: rgba(224, 90, 72, 0.12);
+      --wf-fill: #21242b;
+      --wf-line: #464a54;
+      --good: #5cb98a;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f1f0ec; --surface: #e9e7e1; --ink: #1c1e21; --muted: #5c5f66;
+    --line: #d5d3cb; --accent: #c23b2e; --accent-soft: rgba(194,59,46,0.08);
+    --wf-fill: #e2e0d8; --wf-line: #b9b6ac; --good: #2e6e4e;
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181d; --surface: #1d2026; --ink: #e8e6e1; --muted: #999da6;
+    --line: #2c2f36; --accent: #e05a48; --accent-soft: rgba(224,90,72,0.12);
+    --wf-fill: #21242b; --wf-line: #464a54; --good: #5cb98a;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    margin: 0;
+    font-size: 16px;
+  }
+  .page { max-width: 920px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-size: clamp(30px, 5vw, 46px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 10px 0 14px;
+    text-wrap: balance;
+  }
+  .lede { font-size: 18px; color: var(--muted); max-width: 62ch; margin: 0; }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  h3 { font-size: 17px; font-weight: 700; margin: 0 0 6px; }
+  p { max-width: 68ch; }
+  section { margin-top: 72px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; margin-bottom: 28px; }
+  .section-head .num { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  .section-head p { color: var(--muted); margin: 4px 0 0; font-size: 15px; }
+
+  /* ---------- verdict ---------- */
+  .verdict {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 28px;
+    margin-top: 40px;
+    border-left: 4px solid var(--accent);
+  }
+  .verdict p { margin: 0; font-size: 17px; max-width: 70ch; }
+  .verdict strong { font-weight: 700; }
+
+  /* ---------- audit columns ---------- */
+  .audit { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  @media (max-width: 700px) { .audit { grid-template-columns: 1fr; } }
+  .audit-col h3 { display: flex; align-items: center; gap: 8px; }
+  .audit-col ul { list-style: none; padding: 0; margin: 12px 0 0; }
+  .audit-col li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .audit-col li span.why { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+  .tag-keep, .tag-cut {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 2px;
+  }
+  .tag-keep { color: var(--good); border: 1px solid var(--good); }
+  .tag-cut { color: var(--accent); border: 1px solid var(--accent); }
+
+  .blocker {
+    margin-top: 32px; padding: 20px 24px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+  }
+  .blocker h3 { color: var(--accent); font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .blocker p { margin: 8px 0 0; font-size: 15px; }
+  .blocker code { font-family: var(--mono); font-size: 13px; background: var(--surface); padding: 1px 5px; border: 1px solid var(--line); }
+
+  /* ---------- wireframes ---------- */
+  .wf-block { margin-bottom: 56px; }
+  .wf-meta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .wf-meta .idx { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .wf-note { color: var(--muted); font-size: 14.5px; max-width: 68ch; margin: 4px 0 16px; }
+
+  .wf {
+    border: 1.5px solid var(--wf-line);
+    background: var(--bg);
+    padding: 18px;
+    position: relative;
+  }
+  .wf, .wf * { border-radius: 0; }
+  .bar { background: var(--wf-fill); border: 1px solid var(--wf-line); }
+  .ghost { border: 1px dashed var(--wf-line); background: transparent; }
+  .accent-block { background: var(--accent); border: 1px solid var(--accent); }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .col { display: flex; flex-direction: column; gap: 10px; }
+  .wf-label {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em;
+    color: var(--muted); text-transform: uppercase;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 2px 4px;
+  }
+  .accent-block.wf-label { color: #fff; }
+  .redline {
+    font-family: var(--mono); font-size: 11.5px; color: var(--accent);
+    margin-top: 10px; padding-left: 14px; position: relative;
+  }
+  .redline::before { content: "↖"; position: absolute; left: 0; }
+
+  /* ---------- token table ---------- */
+  .tokens { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  @media (max-width: 700px) { .tokens { grid-template-columns: 1fr; } }
+  .token-card { border: 1px solid var(--line); background: var(--surface); padding: 20px 22px; }
+  .token-card h3 { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .swatches { display: flex; gap: 0; margin: 14px 0 10px; border: 1px solid var(--line); }
+  .swatch { flex: 1; height: 52px; position: relative; }
+  .swatch small {
+    position: absolute; bottom: -22px; left: 0; font-family: var(--mono);
+    font-size: 10px; color: var(--muted); white-space: nowrap;
+  }
+  .token-card ul { list-style: none; padding: 0; margin: 32px 0 0; }
+  .token-card li { font-size: 14px; padding: 7px 0; border-bottom: 1px solid var(--line); color: var(--ink); }
+  .token-card li:last-child { border-bottom: 0; }
+  .token-card li b { font-weight: 700; }
+  .token-card li code { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
+  /* ---------- roadmap ---------- */
+  .roadmap { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+  .roadmap li {
+    display: grid; grid-template-columns: 64px 1fr; gap: 18px;
+    padding: 18px 0; border-bottom: 1px solid var(--line);
+  }
+  .roadmap .pri {
+    font-family: var(--mono); font-size: 13px; font-weight: 700;
+    color: var(--accent);
+  }
+  .roadmap .pri.later { color: var(--muted); }
+  .roadmap h3 { margin-bottom: 4px; }
+  .roadmap p { color: var(--muted); font-size: 14.5px; margin: 0; }
+
+  footer { margin-top: 80px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; font-family: var(--mono); }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="page">
+  <header>
+    <div class="eyebrow">Design review · sahil-portfolio · July 2026</div>
+    <h1>From dev template to client magnet</h1>
+    <p class="lede">A section-by-section redesign spec for sahilijaz's portfolio — what to keep, what to cut, and the layout that sells the work instead of the effects.</p>
+  </header>
+
+  <div class="verdict">
+    <p><strong>Verdict: strong raw material, wrong packaging.</strong> The portfolio has real shipped products — including two apps live on the App&nbsp;Store and Play&nbsp;Store — but presents them behind a 3D loading screen, gradient text, fake screenshot placeholders, and a category literally named “Simple&nbsp;Projects.” Clients hire outcomes and credibility; right now the site sells animation. The redesign below keeps your stack and content, and changes what the visitor sees first.</p>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <span class="num">01</span>
+      <div><h2>Audit — keep vs. cut</h2><p>What the current site gets right, and what is costing you clients.</p></div>
+    </div>
+
+    <div class="audit">
+      <div class="audit-col">
+        <h3><span class="tag-keep">Keep</span></h3>
+        <ul>
+          <li>Real, deployed projects with live URLs
+            <span class="why">11 projects, 2 in mobile app stores — this is your strongest asset.</span></li>
+          <li>Modern stack: Next.js 16, React 19, Tailwind 4
+            <span class="why">Credible to technical buyers; keep it in the footer, not the headline.</span></li>
+          <li>Working contact form with API route (Resend)
+            <span class="why">Most portfolios fake this. Yours works.</span></li>
+          <li>Clean component structure &amp; TypeScript throughout
+            <span class="why">Good engineering hygiene — it shows when clients open the repo.</span></li>
+        </ul>
+      </div>
+      <div class="audit-col">
+        <h3><span class="tag-cut">Cut</span></h3>
+        <ul>
+          <li>3D loading screen, animated cursor, 3D section dividers, skill orbs
+            <span class="why">Reads as a 2021 template; slows first paint on the phones clients browse on.</span></li>
+          <li>Blue→purple→pink gradient text everywhere
+            <span class="why">The single most recognizable “AI/template portfolio” tell.</span></li>
+          <li>Fake abstract “previews” instead of real screenshots
+            <span class="why">You have live products — show them. Screenshots convert; shapes don't.</span></li>
+          <li>Skill percentage bars (Node.js 95%)
+            <span class="why">Meaningless to clients, junior signal to engineers.</span></li>
+          <li>“Simple Projects” category label
+            <span class="why">You are literally telling visitors your work is simple.</span></li>
+          <li>“API key suspended — demo may be unavailable” note
+            <span class="why">Never ship a broken demo. Fix it or remove the project.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="blocker">
+      <h3>⚠ P0 — the site currently cannot build</h3>
+      <p>Two files have stray comments appended (likely by the refactor-watcher agent): <code>package.json</code> ends with <code>// Prettier formatting</code>, making it invalid JSON — <code>npm install</code> and <code>next build</code> fail — and <code>app/layout.tsx</code> ends with an HTML comment <code>&lt;!-- Favicon update --&gt;</code>, which is a TSX syntax error. Also dead: <code>aiProjectsData</code> is defined but never rendered, and the dark-mode toggle state exists but no button uses it. Fix these before anything visual.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">02</span>
+      <div><h2>Proposed layout</h2><p>One page, seven sections, in the order a client decides: who you are → proof → work → how you work → trust → contact.</p></div>
+    </div>
+
+    <!-- NAV -->
+    <div class="wf-block">
+      <div class="wf-meta"><span class="idx">2.1</span><h3>Navigation</h3></div>
+      <p class="wf-note">Drop the floating glass pill. A thin, quiet bar with one visually distinct call-to-action. The CTA is the only colored element on screen — it cannot be missed.</p>
+      <div class="wf">
+        <div class="row" style="justify-content: space-between;">
+          <div class="wf-label" style="font-weight:700; color: var(--ink);">SAHIL IJAZ</div>
+          <div class="row" style="gap:18px;">
+            <div class="wf-label">Work</div>
+            <div class="wf-label">About</div>
+            <div class="wf-label">Process</div>
+            <div class="accent-block wf-label" style="padding:8px 16px;">Start a project →</div>
+          </div>
+        </div>
+      </div>
+      <div class="redline">one accent color, used only where you want the click</div>
+    </div>
+
+    <!-- HERO -->
+    <div class="wf-block">
+      <div class="wf-meta"><span class="idx">2.2</span><h3>Hero — positioning, not decoration</h3></div>
+      <p class="wf-note">Left-aligned, static, instant. No loading gate, no 3D canvas, no “Hi, I'm.” The headline says what you build and for whom; the subline carries proof; two buttons give both client types a path. Loads in under a second on a phone.</p>
+      <div class="wf">
+        <div class="col" style="max-width: 72%; gap: 12px; padding: 28px 10px;">
+          <div class="wf-label" style="justify-content:flex-start; color: var(--accent);">AVAILABLE FOR PROJECTS · LAHORE / REMOTE</div>
+          <div class="bar wf-label" style="height:44px; width: 96%; font-size: 13px; font-weight:700; color: var(--ink);">“I build real-time web &amp; mobile products that ship.”</div>
+          <div class="ghost wf-label" style="height:30px; width: 84%;">Full-stack developer · 11 products delivered · 2 apps live on the App Store &amp; Play Store</div>
+          <div class="row" style="margin-top: 6px;">
+            <div class="accent-block wf-label" style="width:150px; height:40px;">View my work</div>
+            <div class="ghost wf-label" style="width:150px; height:40px;">Book a call</div>
+          </div>
+        </div>
+      </div>
+      <div class="redline">the App Store / Play Store fact belongs in the first screen — it is your best credential</div>
+    </div>
+
+    <!-- PROOF STRIP -->
+    <div class="wf-block">
+      <div class="wf-meta"><span class="idx">2.3</span><h3>Proof strip</h3></div>
+      <p class="wf-note">A single quiet row of hard numbers directly under the hero. Numbers beat adjectives — delete “enthusiastic” and “passionate” everywhere.</p>
+      <div class="wf">
+        <div class="row" style="justify-content: space-around;">
+          <div class="col" style="align-items:center; gap:4px;"><div class="wf-label" style="font-size:16px; font-weight:700; color:var(--ink);">11</div><div class="wf-label">products shipped</div></div>
+          <div class="col" style="align-items:center; gap:4px;"><div class="wf-label" style="font-size:16px; font-weight:700; color:var(--ink);">2</div><div class="wf-label">apps in stores</div></div>
+          <div class="col" style="align-items:center; gap:4px;"><div class="wf-label" style="font-size:16px; font-weight:700; color:var(--ink);">2 yrs</div><div class="wf-label">production experience</div></div>
+          <div class="col" style="align-items:center; gap:4px;"><div class="wf-label" style="font-size:16px; font-weight:700; color:var(--ink);">&lt;24 h</div><div class="wf-label">reply time</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CASE STUDIES -->
+    <div class="wf-block">
+      <div class="wf-meta"><span class="idx">2.4</span><h3>Selected work — 4 case studies, not 11 cards</h3></div>
+      <p class="wf-note">Curate hard: MulberryTree (mobile, in both stores), MundoSalud (telehealth — regulated, impressive), StudyMate AI (RAG + Claude), and one more. Each gets a <em>real screenshot</em>, a problem → solution → outcome line, and links. Everything else moves to a compact “More projects” list below. Rename categories: “Simple Projects” → gone; use Web · Mobile · AI.</p>
+      <div class="wf">
+        <div class="col" style="gap:14px;">
+          <div class="row" style="align-items:stretch;">
+            <div class="bar wf-label" style="flex:1.2; height:120px;">REAL SCREENSHOT<br>(device frame)</div>
+            <div class="col" style="flex:1; gap:8px; justify-content:center;">
+              <div class="wf-label" style="justify-content:flex-start; color:var(--accent);">MOBILE · LIVE ON BOTH STORES</div>
+              <div class="bar wf-label" style="height:22px; width:70%;">MulberryTree — community cooking app</div>
+              <div class="ghost wf-label" style="height:34px;">Problem → what I built → outcome (users, rating, launch)</div>
+              <div class="row"><div class="ghost wf-label" style="width:90px;height:22px;">App Store ↗</div><div class="ghost wf-label" style="width:90px;height:22px;">Play Store ↗</div></div>
+            </div>
+          </div>
+          <div class="row" style="align-items:stretch;">
+            <div class="col" style="flex:1; gap:8px; justify-content:center;">
+              <div class="wf-label" style="justify-content:flex-start; color:var(--accent);">AI · RAG PIPELINE</div>
+              <div class="bar wf-label" style="height:22px; width:70%;">StudyMate AI — chat with any PDF</div>
+              <div class="ghost wf-label" style="height:34px;">Architecture in one sentence + live demo link</div>
+            </div>
+            <div class="bar wf-label" style="flex:1.2; height:120px;">REAL SCREENSHOT<br>(alternating side)</div>
+          </div>
+          <div class="ghost wf-label" style="height:30px;">More projects — compact table: name · one line · stack · link (7 rows)</div>
+        </div>
+      </div>
+      <div class="redline">an outcome line (“3k downloads”, “4.8★”, “used by N clinics”) is worth more than any animation on the site</div>
+    </div>
+
+    <!-- ABOUT + PROCESS -->
+    <div class="wf-block">
+      <div class="wf-meta"><span class="idx">2.5</span><h3>About + How I work</h3></div>
+      <p class="wf-note">A real photo, three first-person sentences, and the experience timeline (fix the Gama/Gamma spelling — it appears both ways). Replace the “Services” cards with a 4-step process: clients don't buy “API Integration,” they buy certainty about how the engagement runs. Skills become a plain grouped list — no orbs, no percentages.</p>
+      <div class="wf">
+        <div class="row" style="align-items:stretch;">
+          <div class="bar wf-label" style="width:120px; min-height:110px;">PHOTO</div>
+          <div class="col" style="flex:1; gap:8px; justify-content:center;">
+            <div class="ghost wf-label" style="height:40px;">3 sentences: who, what you're best at, what working with you is like</div>
+            <div class="ghost wf-label" style="height:22px; width:80%;">Bridge Zone → Gama Developers timeline · Bahria University</div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div class="ghost wf-label" style="flex:1; height:56px;">1 · Scope<br>fixed quote in 48h</div>
+          <div class="ghost wf-label" style="flex:1; height:56px;">2 · Build<br>weekly demos</div>
+          <div class="ghost wf-label" style="flex:1; height:56px;">3 · Ship<br>deploy + handover</div>
+          <div class="ghost wf-label" style="flex:1; height:56px;">4 · Support<br>30 days included</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTIMONIALS + CONTACT -->
+    <div class="wf-block">
+      <div class="wf-meta"><span class="idx">2.6</span><h3>Testimonials + Contact</h3></div>
+      <p class="wf-note">Even two short quotes — from Bridge Zone colleagues or the MulberryTree/MundoSalud clients — change everything; ask this week. Keep your working form, add WhatsApp (your market expects it) and a Calendly link. State the reply time.</p>
+      <div class="wf">
+        <div class="row" style="align-items:stretch;">
+          <div class="ghost wf-label" style="flex:1; height:64px;">“Quote about working with Sahil.”<br>— Name, role, company</div>
+          <div class="ghost wf-label" style="flex:1; height:64px;">“Second quote.”<br>— Name, role, company</div>
+        </div>
+        <div class="row" style="margin-top:12px; align-items:stretch;">
+          <div class="col" style="flex:1.4; gap:8px;">
+            <div class="bar wf-label" style="height:26px;">Name · Email</div>
+            <div class="bar wf-label" style="height:44px;">Project details</div>
+            <div class="accent-block wf-label" style="height:34px; width:160px;">Send — replies &lt; 24 h</div>
+          </div>
+          <div class="col" style="flex:1; gap:8px; justify-content:center;">
+            <div class="ghost wf-label" style="height:24px;">hssahil2913@gmail.com</div>
+            <div class="ghost wf-label" style="height:24px;">WhatsApp ↗</div>
+            <div class="ghost wf-label" style="height:24px;">Book a 20-min call ↗</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">03</span>
+      <div><h2>Visual system</h2><p>The look that replaces gradients: one ground, one ink, one accent, strong type.</p></div>
+    </div>
+    <div class="tokens">
+      <div class="token-card">
+        <h3>Color — dark, but disciplined</h3>
+        <div class="swatches">
+          <div class="swatch" style="background:#101317;"><small>#101317 ground</small></div>
+          <div class="swatch" style="background:#1a1e24;"><small>#1A1E24 surface</small></div>
+          <div class="swatch" style="background:#e9e7e2;"><small>#E9E7E2 ink</small></div>
+          <div class="swatch" style="background:#8a8f98;"><small>#8A8F98 muted</small></div>
+          <div class="swatch" style="background:#4f8cff;"><small>#4F8CFF accent</small></div>
+        </div>
+        <ul>
+          <li><b>One accent, used sparingly:</b> CTA buttons, links, the eyebrow labels. <code>Never in body text or headings.</code></li>
+          <li><b>No gradient text.</b> Headings are solid ink at heavy weight — that is what confidence looks like.</li>
+          <li><b>Keep dark mode as the default</b> (it suits dev work) but colors must pass 4.5:1 contrast.</li>
+        </ul>
+      </div>
+      <div class="token-card">
+        <h3>Type &amp; motion</h3>
+        <ul>
+          <li><b>Keep Geist</b> (already loaded) — but use it properly: 600–800 weight, −2% tracking for headlines; 400 at 16–18px for body.</li>
+          <li><b>Geist Mono for labels</b> — eyebrows, tech tags, metadata. Gives the “engineer” texture without 3D.</li>
+          <li><b>Motion budget:</b> fade+8px rise on scroll-in, 200ms, once. Button hover = color shift only. <code>Delete: cursor, loading screen, magnetic buttons, parallax, orbs.</code></li>
+          <li><b>Performance target:</b> LCP &lt; 1.5s on 4G mobile. Removing Three.js from the critical path gets you most of the way.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="num">04</span>
+      <div><h2>Roadmap</h2><p>In order. Each step is shippable on its own.</p></div>
+    </div>
+    <ul class="roadmap">
+      <li><span class="pri">P0</span>
+        <div><h3>Fix the build</h3><p>Remove the stray comments from package.json and layout.tsx; delete dead aiProjectsData and the unused dark-mode state; disable whatever agent hook is appending junk to files. Verify <code>npm run build</code> passes.</p></div></li>
+      <li><span class="pri">P1</span>
+        <div><h3>Real screenshots + copy pass</h3><p>Capture screenshots of every live project (device frames for mobile). Rewrite hero and about copy: cut “enthusiastic/passionate,” lead with the store-published apps, fix Gama/Gamma, remove the broken-demo note. Rename categories. Add an OG image so shared links show a preview.</p></div></li>
+      <li><span class="pri">P2</span>
+        <div><h3>Restructure into the layout above</h3><p>4 case studies + compact project table, process section replacing services, proof strip, skills as a plain list. Strip Three.js, the loading screen, and the custom cursor.</p></div></li>
+      <li><span class="pri later">P3</span>
+        <div><h3>Credibility layer</h3><p>Collect 2 testimonials, add outcome metrics to each case study, add a Calendly/WhatsApp path, sitemap + robots, and wire up the analytics util you already wrote.</p></div></li>
+    </ul>
+  </section>
+
+  <footer>SPEC · sahil-portfolio redesign · prepared 2026-07-12 · wireframes are structural, not pixel-final</footer>
+</div>
+
+</body>
+</html>

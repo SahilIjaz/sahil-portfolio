@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sahil Ijaz — Full-Stack Developer</title>
+<style>
+  :root {
+    --bg: #101317;
+    --surface: #171b21;
+    --surface-2: #1d222a;
+    --ink: #e9e7e2;
+    --muted: #8a8f98;
+    --faint: #565b64;
+    --line: #262b33;
+    --accent: #4f8cff;
+    --accent-ink: #0b1524;
+    --accent-dim: rgba(79, 140, 255, 0.12);
+    --sans: "Geist", -apple-system, "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
+    --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 24px;
+    font-size: 15px; font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: #6ca0ff; }
+  .btn-ghost { border-color: var(--line); color: var(--ink); }
+  .btn-ghost:hover { border-color: var(--faint); background: var(--surface); }
+  .btn:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(16, 19, 23, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .logo { font-weight: 800; letter-spacing: -0.01em; font-size: 17px; }
+  .nav-links { display: flex; align-items: center; gap: 4px; }
+  .nav-links a.link {
+    padding: 8px 14px; font-size: 14.5px; color: var(--muted); border-radius: 6px;
+    transition: color .15s ease;
+  }
+  .nav-links a.link:hover { color: var(--ink); }
+  .nav-links .btn { padding: 9px 18px; font-size: 14px; margin-left: 12px; }
+  @media (max-width: 640px) { .nav-links a.link { display: none; } }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 110px 0 0; }
+  .hero .avail {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 26px;
+  }
+  .hero .dot { width: 7px; height: 7px; border-radius: 50%; background: #3ecf8e; }
+  h1 {
+    font-size: clamp(38px, 6.4vw, 66px);
+    font-weight: 800;
+    letter-spacing: -0.028em;
+    line-height: 1.06;
+    max-width: 17ch;
+    text-wrap: balance;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero .sub {
+    margin-top: 24px;
+    font-size: 18.5px;
+    color: var(--muted);
+    max-width: 56ch;
+  }
+  .hero .sub strong { color: var(--ink); font-weight: 600; }
+  .hero .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 38px; }
+  .hero .socials { display: flex; gap: 20px; margin-top: 34px; }
+  .hero .socials a { font-family: var(--mono); font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 2px; transition: color .15s; }
+  .hero .socials a:hover { color: var(--accent); }
+
+  /* ---------- proof strip ---------- */
+  .proof {
+    margin-top: 90px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .proof-inner {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    padding: 30px 0;
+  }
+  @media (max-width: 640px) { .proof-inner { grid-template-columns: repeat(2, 1fr); gap: 24px 0; } }
+  .proof-item { text-align: center; }
+  .proof-item .n {
+    font-size: 30px; font-weight: 800; letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .proof-item .l { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+  /* ---------- sections ---------- */
+  section { padding: 110px 0 0; }
+  .sec-head { margin-bottom: 52px; }
+  h2 {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 800; letter-spacing: -0.022em; line-height: 1.15;
+    margin-top: 10px; text-wrap: balance;
+  }
+  .sec-head p { color: var(--muted); margin-top: 12px; max-width: 58ch; }
+
+  /* ---------- case studies ---------- */
+  .case {
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px;
+    align-items: center;
+    padding: 46px 0;
+    border-top: 1px solid var(--line);
+  }
+  .case:nth-child(even) .case-shot { order: 2; }
+  @media (max-width: 800px) {
+    .case { grid-template-columns: 1fr; gap: 28px; }
+    .case:nth-child(even) .case-shot { order: 0; }
+  }
+  .case-shot {
+    aspect-ratio: 16 / 10.5;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    position: relative;
+    background: var(--surface-2);
+  }
+  .shot-note {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 12px; color: var(--faint);
+    text-align: center; padding: 20px;
+  }
+  /* stylized stand-in screens (replace with real screenshots) */
+  .screen { position: absolute; inset: 0; padding: 10%; display: flex; gap: 4%; }
+  .screen .phone {
+    flex: 1; border-radius: 14px; border: 1px solid var(--line);
+    background: linear-gradient(160deg, #1c2129, #141820);
+    display: flex; flex-direction: column; gap: 8%; padding: 8% 7%;
+  }
+  .screen .phone i { display: block; border-radius: 4px; background: #262c36; }
+  .screen .phone i.hd { height: 12%; width: 60%; background: #303845; }
+  .screen .phone i.ln { height: 7%; }
+  .screen .phone i.img { flex: 1; background: #20262f; }
+  .case-body .kicker { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  .case-body h3 { font-size: 25px; font-weight: 750; letter-spacing: -0.015em; margin-top: 10px; }
+  .case-body .desc { color: var(--muted); margin-top: 12px; font-size: 15.5px; }
+  .case-body .outcome {
+    margin-top: 16px; padding: 12px 16px;
+    background: var(--accent-dim); border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    font-size: 14.5px; color: var(--ink);
+  }
+  .case-body .stack { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .case-body .stack span {
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 5px; padding: 4px 9px;
+  }
+  .case-links { display: flex; gap: 22px; margin-top: 20px; }
+  .case-links a { font-size: 14px; font-weight: 600; color: var(--accent); }
+  .case-links a:hover { text-decoration: underline; }
+  .case-links a.dim { color: var(--muted); }
+
+  /* ---------- more projects table ---------- */
+  .more { margin-top: 64px; }
+  .more h3 { font-size: 15px; font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
+  .ptable { width: 100%; border-collapse: collapse; }
+  .ptable td { padding: 15px 12px 15px 0; border-top: 1px solid var(--line); font-size: 14.5px; vertical-align: top; }
+  .ptable td.pname { font-weight: 650; white-space: nowrap; }
+  .ptable td.pdesc { color: var(--muted); }
+  .ptable td.pstack { font-family: var(--mono); font-size: 12px; color: var(--faint); white-space: nowrap; }
+  .ptable td.plink { text-align: right; white-space: nowrap; }
+  .ptable td.plink a { color: var(--accent); font-size: 13.5px; font-weight: 600; }
+  .ptable td.plink a:hover { text-decoration: underline; }
+  .table-scroll { overflow-x: auto; }
+  @media (max-width: 720px) { .ptable td.pstack { display: none; } }
+
+  /* ---------- about ---------- */
+  .about-grid { display: grid; grid-template-columns: 300px 1fr; gap: 56px; align-items: start; }
+  @media (max-width: 800px) { .about-grid { grid-template-columns: 1fr; } }
+  .headshot {
+    aspect-ratio: 4/4.6; border-radius: 12px; border: 1px solid var(--line);
+    background: linear-gradient(165deg, var(--surface-2), var(--surface));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 12px; color: var(--faint); text-align: center; padding: 16px;
+  }
+  .about-copy p { color: var(--muted); margin-bottom: 16px; max-width: 60ch; }
+  .about-copy p strong { color: var(--ink); font-weight: 600; }
+  .timeline { margin-top: 30px; border-top: 1px solid var(--line); }
+  .t-row { display: grid; grid-template-columns: 170px 1fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  @media (max-width: 560px) { .t-row { grid-template-columns: 1fr; gap: 4px; } }
+  .t-row .when { font-family: var(--mono); font-size: 12.5px; color: var(--faint); padding-top: 3px; }
+  .t-row .what b { font-weight: 650; }
+  .t-row .what span { color: var(--muted); font-size: 14.5px; display: block; }
+  .skills { margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 640px) { .skills { grid-template-columns: 1fr; } }
+  .skill-group h4 { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 10px; }
+  .skill-group ul { list-style: none; padding: 0; }
+  .skill-group li { font-size: 14.5px; color: var(--muted); padding: 4px 0; }
+
+  /* ---------- process ---------- */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  @media (max-width: 880px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+  .step {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 26px 24px;
+  }
+  .step .no { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .step h3 { font-size: 18px; font-weight: 700; margin: 10px 0 8px; }
+  .step p { font-size: 14px; color: var(--muted); }
+
+  /* ---------- testimonials ---------- */
+  .quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 720px) { .quotes { grid-template-columns: 1fr; } }
+  .quote {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 30px 28px;
+  }
+  .quote blockquote { font-size: 16.5px; line-height: 1.6; color: var(--ink); }
+  .quote blockquote::before { content: "“"; color: var(--accent); font-size: 34px; line-height: 0; vertical-align: -10px; margin-right: 4px; }
+  .quote cite { display: block; margin-top: 18px; font-style: normal; font-size: 13.5px; color: var(--muted); }
+  .quote cite b { color: var(--ink); font-weight: 650; }
+
+  /* ---------- contact ---------- */
+  .contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; }
+  @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; } }
+  form .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { form .row2 { grid-template-columns: 1fr; } }
+  label { display: block; font-size: 13.5px; font-weight: 600; margin: 0 0 7px; color: var(--ink); }
+  input, textarea {
+    width: 100%; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 8px; padding: 13px 15px; color: var(--ink);
+    font-family: var(--sans); font-size: 15px;
+    transition: border-color .15s ease;
+  }
+  input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+  input::placeholder, textarea::placeholder { color: var(--faint); }
+  .field { margin-bottom: 18px; }
+  form .btn { width: 100%; justify-content: center; }
+  .reply-note { font-family: var(--mono); font-size: 12px; color: var(--muted); text-align: center; margin-top: 12px; }
+  .direct { border-left: 1px solid var(--line); padding-left: 40px; }
+  @media (max-width: 800px) { .direct { border-left: 0; padding-left: 0; } }
+  .direct h3 { font-size: 15px; font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 18px; }
+  .direct a.big { display: block; font-size: 17px; font-weight: 650; color: var(--ink); padding: 12px 0; border-bottom: 1px solid var(--line); transition: color .15s; }
+  .direct a.big:hover { color: var(--accent); }
+  .direct a.big small { display: block; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); font-weight: 400; margin-bottom: 2px; }
+
+  /* ---------- footer ---------- */
+  footer { margin-top: 110px; border-top: 1px solid var(--line); padding: 36px 0 48px; }
+  .foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .foot .c { font-size: 13.5px; color: var(--faint); }
+  .foot .links { display: flex; gap: 22px; }
+  .foot .links a { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+  .foot .links a:hover { color: var(--accent); }
+
+  /* scroll-in reveal */
+  .reveal { opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="logo" href="#">SAHIL&nbsp;IJAZ</a>
+    <div class="nav-links">
+      <a class="link" href="#work">Work</a>
+      <a class="link" href="#about">About</a>
+      <a class="link" href="#process">Process</a>
+      <a class="link" href="#contact">Contact</a>
+      <a class="btn btn-primary" href="#contact">Start a project</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="avail">
+    <span class="dot"></span>
+    <span class="eyebrow">Available for projects · Lahore / Remote</span>
+  </div>
+  <h1>I build real-time web &amp; mobile products <span class="accent">that ship.</span></h1>
+  <p class="sub">Full-stack developer specializing in Node.js and Next.js. I've delivered <strong>11 production apps</strong> — including two live on the <strong>App&nbsp;Store and Play&nbsp;Store</strong> — covering telehealth, marketplaces, and AI tools.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="#work">View my work →</a>
+    <a class="btn btn-ghost" href="#contact">Book a call</a>
+  </div>
+  <div class="socials">
+    <a href="https://github.com/SahilIjaz" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/sahil-ijaz-a75b15281/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="/sahil-resume.pdf">Resume (PDF)</a>
+  </div>
+</header>
+
+<div class="proof">
+  <div class="wrap proof-inner">
+    <div class="proof-item"><div class="n">11</div><div class="l">Products shipped</div></div>
+    <div class="proof-item"><div class="n">2</div><div class="l">Apps in stores</div></div>
+    <div class="proof-item"><div class="n">2 yrs</div><div class="l">Production experience</div></div>
+    <div class="proof-item"><div class="n">&lt;24 h</div><div class="l">Reply time</div></div>
+  </div>
+</div>
+
+<section id="work" class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Selected work</span>
+    <h2>Four products, start to finish</h2>
+    <p>Case studies with real screenshots and outcomes. The full project list is below.</p>
+  </div>
+
+  <article class="case reveal">
+    <div class="case-shot">
+      <div class="screen">
+        <div class="phone"><i class="hd"></i><i class="img"></i><i class="ln"></i><i class="ln" style="width:70%"></i></div>
+        <div class="phone" style="margin-top:6%"><i class="hd"></i><i class="ln"></i><i class="img"></i><i class="ln" style="width:55%"></i></div>
+      </div>
+      <div class="shot-note">→ replace with real device screenshots</div>
+    </div>
+    <div class="case-body">
+      <span class="kicker">Mobile · Live on both stores</span>
+      <h3>MulberryTree</h3>
+      <p class="desc">A community cooking platform connecting chefs, home cooks, and farmers — recipes, courses, and local events. I built the full stack: React Native app, Node.js backend, media pipeline on AWS S3.</p>
+      <div class="outcome">Shipped to the App Store and Google Play; serving an active community across iOS and Android.</div>
+      <div class="stack"><span>React Native</span><span>Node.js</span><span>MongoDB</span><span>AWS S3</span></div>
+      <div class="case-links">
+        <a href="https://apps.apple.com/us/app/mulberry-tree-cooking/id6746870204" target="_blank" rel="noopener">App Store ↗</a>
+        <a href="https://play.google.com/store/apps/details?id=com.mulberry_tree" target="_blank" rel="noopener">Play Store ↗</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="case reveal">
+    <div class="case-shot">
+      <div class="screen">
+        <div class="phone" style="flex:2.2"><i class="hd"></i><i class="ln"></i><i class="ln" style="width:80%"></i><i class="img"></i></div>
+        <div class="phone"><i class="img"></i><i class="ln"></i></div>
+      </div>
+      <div class="shot-note">→ replace with real screenshots</div>
+    </div>
+    <div class="case-body">
+      <span class="kicker">Telehealth · Web + Mobile</span>
+      <h3>MundoSalud</h3>
+      <p class="desc">A telehealth platform for real-time doctor consultations — video calls via Agora, appointment scheduling, and an admin dashboard. I engineered the real-time backend and shipped the companion mobile app.</p>
+      <div class="outcome">Live on Google Play; handles live video consultations and scheduling in production.</div>
+      <div class="stack"><span>Node.js</span><span>Socket.io</span><span>Agora</span><span>React Native</span><span>MongoDB</span></div>
+      <div class="case-links">
+        <a href="https://play.google.com/store/apps/details?id=com.app.mundoSalud" target="_blank" rel="noopener">Play Store ↗</a>
+        <a class="dim" href="https://github.com/SahilIjaz/MundoSalud" target="_blank" rel="noopener">Code ↗</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="case reveal">
+    <div class="case-shot">
+      <div class="screen">
+        <div class="phone" style="flex:1.4"><i class="hd"></i><i class="img"></i></div>
+        <div class="phone"><i class="ln"></i><i class="ln" style="width:75%"></i><i class="ln"></i><i class="ln" style="width:60%"></i><i class="ln"></i></div>
+      </div>
+      <div class="shot-note">→ replace with real screenshots</div>
+    </div>
+    <div class="case-body">
+      <span class="kicker">AI · Retrieval-augmented generation</span>
+      <h3>StudyMate AI</h3>
+      <p class="desc">Chat with any PDF. Documents are chunked into a FAISS vector store; questions retrieve the relevant passages and Claude generates sourced answers. Python/FastAPI backend, Next.js frontend.</p>
+      <div class="outcome">Full RAG pipeline in production — try it live with any PDF.</div>
+      <div class="stack"><span>Python</span><span>FastAPI</span><span>FAISS</span><span>Claude API</span><span>Next.js</span></div>
+      <div class="case-links">
+        <a href="https://study-mate-frontend-three.vercel.app" target="_blank" rel="noopener">Live demo ↗</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="case reveal">
+    <div class="case-shot">
+      <div class="screen">
+        <div class="phone"><i class="hd"></i><i class="ln"></i><i class="ln" style="width:65%"></i><i class="img"></i></div>
+        <div class="phone" style="flex:1.6"><i class="img"></i><i class="ln"></i><i class="ln" style="width:50%"></i></div>
+      </div>
+      <div class="shot-note">→ replace with real screenshots</div>
+    </div>
+    <div class="case-body">
+      <span class="kicker">Web · Multi-tenant SaaS</span>
+      <h3>Grocio</h3>
+      <p class="desc">A grocery delivery platform with role-based access for vendors, customers, and admins — Stripe payments, order flows, and tenant isolation across a shared Next.js + Node.js codebase.</p>
+      <div class="outcome">Multi-tenant architecture with three distinct role experiences, live today.</div>
+      <div class="stack"><span>Next.js</span><span>Node.js</span><span>MongoDB</span><span>Stripe</span></div>
+      <div class="case-links">
+        <a href="https://grocio-app-frontend.netlify.app/" target="_blank" rel="noopener">Live demo ↗</a>
+      </div>
+    </div>
+  </article>
+
+  <div class="more reveal">
+    <h3>More projects</h3>
+    <div class="table-scroll">
+      <table class="ptable">
+        <tr>
+          <td class="pname">Anaya</td>
+          <td class="pdesc">Social platform — stories, messaging, custom feed algorithm</td>
+          <td class="pstack">Node.js · Socket.io · S3</td>
+          <td class="plink"><a href="https://anaya-d9z9.vercel.app/" target="_blank" rel="noopener">Live ↗</a></td>
+        </tr>
+        <tr>
+          <td class="pname">Connect Hub</td>
+          <td class="pdesc">Full-stack social app with real-time chat</td>
+          <td class="pstack">Next.js · Socket.io</td>
+          <td class="plink"><a href="https://connect-hub-git-main-sahil-ijazs-projects.vercel.app/" target="_blank" rel="noopener">Live ↗</a></td>
+        </tr>
+        <tr>
+          <td class="pname">AI Resume Analyzer</td>
+          <td class="pdesc">Claude-powered resume scoring against target roles</td>
+          <td class="pstack">Next.js · Express · Claude</td>
+          <td class="plink"><a href="https://ai-resume-analyzer-sepia-tau.vercel.app" target="_blank" rel="noopener">Live ↗</a></td>
+        </tr>
+        <tr>
+          <td class="pname">FishScout</td>
+          <td class="pdesc">Real-time fishing community with live spots &amp; weather</td>
+          <td class="pstack">Node.js · PostgreSQL</td>
+          <td class="plink"><a href="https://github.com/SahilIjaz/FishScout" target="_blank" rel="noopener">Code ↗</a></td>
+        </tr>
+        <tr>
+          <td class="pname">CoachMaster</td>
+          <td class="pdesc">Match strategy &amp; formation analysis for coaches</td>
+          <td class="pstack">Next.js · Node.js</td>
+          <td class="plink"><a href="https://github.com/SahilIjaz/CoachMaster-Web" target="_blank" rel="noopener">Code ↗</a></td>
+        </tr>
+        <tr>
+          <td class="pname">MulberryTree Web</td>
+          <td class="pdesc">Web companion to the MulberryTree mobile app</td>
+          <td class="pstack">Node.js · Express · AWS</td>
+          <td class="plink"><a href="https://mulberry-tree.vercel.app" target="_blank" rel="noopener">Live ↗</a></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">About</span>
+    <h2>The person behind the commits</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div class="headshot">→ real photo here<br>(professional, well-lit, no filter)</div>
+    <div class="about-copy">
+      <p>I'm Sahil — a full-stack developer in Lahore, Pakistan. I'm at my best on <strong>real-time systems</strong>: chat, live video, marketplaces, anything where the backend has to keep up with people. I work in Node.js, Next.js, and React Native, and I've taken products all the way from first commit to the app stores.</p>
+      <p>Working with me looks like this: <strong>weekly demos, honest estimates, and no surprises at handover.</strong> I've shipped for a telehealth provider, a food community, and multiple startups — and every one of those products is still running.</p>
+      <div class="timeline">
+        <div class="t-row"><span class="when">Oct 2025 — now</span><div class="what"><b>Gama Developers</b> · Full-Stack Developer<span>Full-stack web applications with Next.js and React</span></div></div>
+        <div class="t-row"><span class="when">Jul 2024 — Oct 2025</span><div class="what"><b>Bridge Zone</b> · Backend Developer<span>5+ real-time backend services; Socket.IO, Stripe, Agora; AWS EC2/S3 deployments</span></div></div>
+        <div class="t-row"><span class="when">2023 — 2027</span><div class="what"><b>Bahria University</b> · BS Information Technology<span>Lahore, Pakistan</span></div></div>
+      </div>
+      <div class="skills">
+        <div class="skill-group"><h4>Backend</h4><ul><li>Node.js · Express · Nest.js</li><li>Socket.io (real-time)</li><li>MongoDB · PostgreSQL</li></ul></div>
+        <div class="skill-group"><h4>Frontend &amp; Mobile</h4><ul><li>Next.js · React</li><li>React Native</li><li>TypeScript · Tailwind</li></ul></div>
+        <div class="skill-group"><h4>Infra &amp; Integrations</h4><ul><li>AWS EC2 · S3</li><li>Stripe · Agora</li><li>Claude API · FAISS</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process" class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Process</span>
+    <h2>How a project runs</h2>
+    <p>You always know where things stand — that's the whole system.</p>
+  </div>
+  <div class="steps reveal">
+    <div class="step"><span class="no">01</span><h3>Scope</h3><p>We define the build together. You get a fixed quote and timeline within 48 hours.</p></div>
+    <div class="step"><span class="no">02</span><h3>Build</h3><p>Weekly demo of working software — not status reports. You steer as we go.</p></div>
+    <div class="step"><span class="no">03</span><h3>Ship</h3><p>Deployment, store submission if mobile, and a clean handover with docs.</p></div>
+    <div class="step"><span class="no">04</span><h3>Support</h3><p>30 days of post-launch fixes included. After that, I'm one message away.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Testimonials</span>
+    <h2>What it's like to work with me</h2>
+  </div>
+  <div class="quotes reveal">
+    <div class="quote">
+      <blockquote>Placeholder — ask your Bridge Zone lead or the MulberryTree client for two sentences this week. A real quote here outperforms everything else on the page.</blockquote>
+      <cite><b>Name</b> · Role, Company</cite>
+    </div>
+    <div class="quote">
+      <blockquote>Second placeholder — even a short LinkedIn recommendation, quoted with permission, works.</blockquote>
+      <cite><b>Name</b> · Role, Company</cite>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Contact</span>
+    <h2>Tell me about your project</h2>
+    <p>Send a few lines about what you're building. I reply within 24 hours.</p>
+  </div>
+  <div class="contact-grid reveal">
+    <form onsubmit="return false">
+      <div class="row2">
+        <div class="field"><label for="n">Name</label><input id="n" type="text" placeholder="Your name" required></div>
+        <div class="field"><label for="e">Email</label><input id="e" type="email" placeholder="you@company.com" required></div>
+      </div>
+      <div class="field"><label for="m">Project details</label><textarea id="m" rows="5" placeholder="What are you building? Rough timeline and budget help too." required></textarea></div>
+      <button class="btn btn-primary" type="submit">Send message</button>
+      <p class="reply-note">Replies within 24 hours · your details stay private</p>
+    </form>
+    <div class="direct">
+      <h3>Or reach me directly</h3>
+      <a class="big" href="mailto:hssahil2913@gmail.com"><small>Email</small>hssahil2913@gmail.com</a>
+      <a class="big" href="https://wa.me/923024891399" target="_blank" rel="noopener"><small>WhatsApp</small>+92 302 4891399</a>
+      <a class="big" href="#" ><small>Call</small>Book a 20-minute intro ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span class="c">© 2026 Sahil Ijaz · Full-Stack Developer, Lahore</span>
+    <div class="links">
+      <a href="https://github.com/SahilIjaz" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/sahil-ijaz-a75b15281/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:hssahil2913@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
