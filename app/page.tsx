@@ -50,7 +50,6 @@ const caseStudies: CaseStudy[] = [
     tech: ['Node.js', 'Socket.io', 'Agora', 'React Native', 'MongoDB'],
     links: [
       { label: 'Play Store', href: 'https://play.google.com/store/apps/details?id=com.app.mundoSalud' },
-      { label: 'Code', href: 'https://github.com/SahilIjaz/MundoSalud', dim: true },
     ],
     panes: (
       <>
