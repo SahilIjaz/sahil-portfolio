@@ -287,7 +287,7 @@ function ContactForm() {
           setStatus({ type: 'error', message: data.error || 'Something went wrong. Please try again.' });
         }
       } catch {
-        setStatus({ type: 'error', message: 'Failed to send. Email me directly at hssahil2913@gmail.com.' });
+        setStatus({ type: 'error', message: 'Failed to send. Email me directly at sahil@sahilijaz.tech.' });
       } finally {
         setIsSubmitting(false);
       }
@@ -561,7 +561,7 @@ export default function Portfolio() {
           </p>
           <ContactForm />
           <p className="direct reveal" style={{ '--i': 5 } as React.CSSProperties}>
-            or reach me at <a href="mailto:hssahil2913@gmail.com">hssahil2913@gmail.com</a> ·{' '}
+            or reach me at <a href="mailto:sahil@sahilijaz.tech">sahil@sahilijaz.tech</a> ·{' '}
             <a href="https://wa.me/923024891399" target="_blank" rel="noopener noreferrer">WhatsApp</a> ·{' '}
             <a href="https://www.linkedin.com/in/sahil-ijaz-a75b15281/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </p>
@@ -574,7 +574,7 @@ export default function Portfolio() {
           <div className="links">
             <a href="https://github.com/SahilIjaz" target="_blank" rel="noopener noreferrer">GitHub</a>
             <a href="https://www.linkedin.com/in/sahil-ijaz-a75b15281/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="mailto:hssahil2913@gmail.com">Email</a>
+            <a href="mailto:sahil@sahilijaz.tech">Email</a>
           </div>
         </div>
       </footer>
