@@ -100,9 +100,10 @@ const miniProjects: MiniProject[] = [
 ];
 
 const timeline = [
-  { when: 'Oct 2025 — now', org: 'Gama Developers', role: 'Full-Stack Developer', detail: 'Full-stack web applications with Next.js and React' },
-  { when: 'Jul 2024 — Oct 2025', org: 'Bridge Zone', role: 'Backend Developer', detail: '5+ real-time backend services; Socket.IO, Stripe, Agora; AWS EC2/S3' },
-  { when: '2023 — 2027', org: 'Bahria University', role: 'BS Information Technology', detail: 'Lahore, Pakistan' },
+  { when: 'Apr 2026 — now', org: 'Tinkerbyte Labs', role: 'Associate Full-Stack Developer', detail: 'Full-stack features across client products; scalable web applications' },
+  { when: 'Mar 2026 — Apr 2026', org: 'Gamma Developers', role: 'Full-Stack Developer', detail: 'Custom CRMs, AI-powered chatbots, and cloud-enabled systems' },
+  { when: 'Jul 2024 — Mar 2026', org: 'Bridge Zone', role: 'Backend Developer', detail: '5+ real-time backend services; Socket.IO, Stripe, Agora; AWS EC2/S3' },
+  { when: '2023 — 2026', org: 'Bahria University', role: 'BS Information Technology', detail: 'Lahore, Pakistan' },
 ];
 
 const skillGroups = [
