@@ -242,7 +242,7 @@ a { color: inherit; text-decoration: none; }
 }
 .case-card::before {
   counter-increment: case;
-  content: "0" counter(case) " — 04";
+  content: "0" counter(case) " — 05";
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 12px; letter-spacing: 0.14em;
   color: var(--faint); margin-bottom: 26px;

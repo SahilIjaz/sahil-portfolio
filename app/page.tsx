@@ -24,6 +24,25 @@ interface MiniProject {
 
 const caseStudies: CaseStudy[] = [
   {
+    kicker: 'Full stack · SaaS · AI',
+    name: 'Naano Clone',
+    description:
+      'A full rebuild of naano.com — a marketplace where B2B brands book vetted LinkedIn creators for sponsored posts and track the clicks, leads and pipeline every post generates. Email sign-up with inbox verification, Google and LinkedIn sign-in, AI-assisted brand and creator workspaces, agency onboarding, and a chat assistant grounded in the company’s public docs.',
+    outcome: 'Deployed on Vercel with a GitHub Actions pipeline that type-checks, builds and ships on every push.',
+    tech: ['Next.js 15', 'React 19', 'TypeScript', 'libSQL / Turso', 'Google Gemini API', 'Nodemailer', 'OAuth 2.0 / OIDC', 'Vercel', 'GitHub Actions', 'Playwright'],
+    links: [
+      { label: 'Live demo', href: 'https://assessment-nano-clone.vercel.app' },
+      { label: 'GitHub', href: 'https://github.com/SahilIjaz/assessment-nano-clone' },
+    ],
+    image: '/projects/naano-clone.jpg',
+    panes: (
+      <>
+        <div className="pane"><i className="hd" /><i className="img" /><i className="ln" /><i className="ln" style={{ width: '65%' }} /></div>
+        <div className="pane" style={{ flex: 1.5 }}><i className="img" /><i className="ln" /><i className="ln" style={{ width: '55%' }} /></div>
+      </>
+    ),
+  },
+  {
     kicker: 'Mobile · Live on both stores',
     name: 'MulberryTree',
     description:
@@ -432,7 +451,7 @@ export default function Portfolio() {
       <section id="work" className="section wrap">
         <div className="sec-head reveal">
           <span className="eyebrow">Selected work</span>
-          <h2>Four products, start to finish</h2>
+          <h2>Five products, start to finish</h2>
           <p>Case studies with outcomes — keep scrolling, each one slides in over the last.</p>
         </div>
 
