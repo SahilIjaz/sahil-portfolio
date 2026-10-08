@@ -135,7 +135,7 @@ const miniProjects: MiniProject[] = [
 ];
 
 const timeline = [
-  { when: 'Apr 2026 — now', org: 'Tinkerbyte Labs', role: 'Associate Full-Stack Developer', detail: 'Full-stack features across client products; scalable web applications' },
+  { when: 'Apr 2026 — now', org: 'Tinkerbyte Labs', role: 'Software Engineer (DevOps Focus)', detail: 'AWS (EC2, S3) cloud environments, Docker containerization, CI/CD automation; Node.js, Next.js, PostgreSQL' },
   { when: 'Mar 2026 — Apr 2026', org: 'Gamma Developers', role: 'Full-Stack Developer', detail: 'Custom CRMs, AI-powered chatbots, and cloud-enabled systems' },
   { when: 'Jul 2024 — Mar 2026', org: 'Bridge Zone', role: 'Backend Developer', detail: '5+ real-time backend services; Socket.IO, Stripe, Agora; AWS EC2/S3' },
   { when: '2023 — 2026', org: 'Bahria University', role: 'BS Information Technology', detail: 'Lahore, Pakistan' },

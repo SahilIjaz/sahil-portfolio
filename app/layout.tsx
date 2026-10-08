@@ -13,19 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sahil Ijaz | Full Stack Developer",
-  description: "Full Stack Developer specializing in Next.js, Node.js, and React. Building scalable, real-time web applications with modern technologies.",
-  keywords: ["Full Stack Developer", "Next.js", "React", "Node.js", "Web Developer", "Sahil Ijaz", "Portfolio"],
+  title: "Sahil Ijaz | DevOps & Software Engineer",
+  description: "DevOps & Software Engineer automating cloud deployments and CI/CD pipelines. AWS, Docker, Linux, Next.js, Node.js, Express, RAG and Gen-AI.",
+  keywords: ["DevOps Engineer", "Software Engineer", "AWS", "Docker", "CI/CD", "Next.js", "Node.js", "Full Stack Developer", "Sahil Ijaz", "Portfolio"],
   authors: [{ name: "Sahil Ijaz" }],
   openGraph: {
-    title: "Sahil Ijaz | Full Stack Developer",
-    description: "Full Stack Developer specializing in Next.js, Node.js, and React. Building scalable, real-time web applications.",
+    title: "Sahil Ijaz | DevOps & Software Engineer",
+    description: "DevOps & Software Engineer automating cloud deployments and CI/CD pipelines. AWS, Docker, Linux, Next.js, Node.js, Express, RAG and Gen-AI.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sahil Ijaz | Full Stack Developer",
-    description: "Full Stack Developer specializing in Next.js, Node.js, and React.",
+    title: "Sahil Ijaz | DevOps & Software Engineer",
+    description: "DevOps & Software Engineer automating cloud deployments and CI/CD pipelines.",
   },
 };
 
