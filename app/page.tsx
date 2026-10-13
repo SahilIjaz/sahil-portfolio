@@ -101,6 +101,7 @@ const caseStudies: CaseStudy[] = [
     outcome: 'Full RAG pipeline in production — try it live with any PDF.',
     tech: ['Python', 'FastAPI', 'FAISS', 'Claude API', 'Next.js'],
     links: [{ label: 'Live demo', href: 'https://studymate-sand-eight.vercel.app' }],
+    image: '/projects/studymate.jpg',
     panes: (
       <>
         <div className="pane" style={{ flex: 1.4 }}><i className="hd" /><i className="img" /></div>
@@ -116,6 +117,7 @@ const caseStudies: CaseStudy[] = [
     outcome: 'Multi-tenant architecture with three distinct role experiences, live today.',
     tech: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
     links: [{ label: 'Live demo', href: 'https://grocio-app-frontend.netlify.app/' }],
+    image: '/projects/grocio.jpg',
     panes: (
       <>
         <div className="pane"><i className="hd" /><i className="ln" /><i className="ln" style={{ width: '65%' }} /><i className="img" /></div>
