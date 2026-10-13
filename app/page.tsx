@@ -100,7 +100,7 @@ const caseStudies: CaseStudy[] = [
       'Chat with any PDF. Documents are chunked into a FAISS vector store; questions retrieve the relevant passages and Claude generates sourced answers. Python/FastAPI backend, Next.js frontend.',
     outcome: 'Full RAG pipeline in production — try it live with any PDF.',
     tech: ['Python', 'FastAPI', 'FAISS', 'Claude API', 'Next.js'],
-    links: [{ label: 'Live demo', href: 'https://study-mate-frontend-three.vercel.app' }],
+    links: [{ label: 'Live demo', href: 'https://studymate-sand-eight.vercel.app' }],
     panes: (
       <>
         <div className="pane" style={{ flex: 1.4 }}><i className="hd" /><i className="img" /></div>
