@@ -117,7 +117,7 @@ const caseStudies: CaseStudy[] = [
     outcome: 'Multi-tenant architecture with three distinct role experiences, live today.',
     tech: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
     links: [{ label: 'Live demo', href: 'https://grocio-web.vercel.app' }],
-    image: '/projects/grocio.jpg',
+    image: '/projects/grocio-v2.jpg',
     panes: (
       <>
         <div className="pane"><i className="hd" /><i className="ln" /><i className="ln" style={{ width: '65%' }} /><i className="img" /></div>
