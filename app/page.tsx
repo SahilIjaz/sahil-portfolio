@@ -116,7 +116,7 @@ const caseStudies: CaseStudy[] = [
       'A grocery delivery platform with role-based access for vendors, customers, and admins — Stripe payments, order flows, and tenant isolation across a shared Next.js + Node.js codebase.',
     outcome: 'Multi-tenant architecture with three distinct role experiences, live today.',
     tech: ['Next.js', 'Node.js', 'MongoDB', 'Stripe'],
-    links: [{ label: 'Live demo', href: 'https://grocio-app-frontend.netlify.app/' }],
+    links: [{ label: 'Live demo', href: 'https://grocio-web.vercel.app' }],
     image: '/projects/grocio.jpg',
     panes: (
       <>
