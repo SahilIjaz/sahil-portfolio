@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
+import { FlipWords } from '@/components/ui/FlipWords';
+import { Spotlight } from '@/components/ui/Spotlight';
 
 // ─── Data ───────────────────────────────────────────────────────────────────
 
@@ -149,6 +151,11 @@ const skillGroups = [
   { title: 'Infra & Integrations', items: ['AWS EC2 · S3', 'Stripe · Agora', 'Claude API · FAISS'] },
 ];
 
+const techMarquee = [
+  'Next.js', 'React', 'Node.js', 'TypeScript', 'AWS', 'Docker', 'PostgreSQL',
+  'MongoDB', 'Socket.io', 'GitHub Actions', 'RAG · Gen-AI', 'Stripe',
+];
+
 const processSteps = [
   { title: 'Scope', text: 'We define the build together. You get a fixed quote and timeline within 48 hours.' },
   { title: 'Build', text: 'Weekly demo of working software — not status reports. You steer as we go.' },
@@ -170,6 +177,19 @@ function usePageMotion() {
     // hero load choreography
     const raf = requestAnimationFrame(() => document.body.classList.add('loaded'));
     cleanups.push(() => cancelAnimationFrame(raf));
+
+    // mouse-tracking spotlight on glass cards (Aceternity card-spotlight)
+    if (!reduced) {
+      document.querySelectorAll<HTMLElement>('.case-card, .step, .contact-form').forEach((el) => {
+        const onMove = (e: MouseEvent) => {
+          const r = el.getBoundingClientRect();
+          el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+          el.style.setProperty('--my', `${e.clientY - r.top}px`);
+        };
+        el.addEventListener('mousemove', onMove);
+        cleanups.push(() => el.removeEventListener('mousemove', onMove));
+      });
+    }
 
     // scroll progress bar
     const bar = document.getElementById('progress');
@@ -416,6 +436,7 @@ export default function Portfolio() {
       <header className="hero">
         <div className="aurora" />
         <div className="gridlines" />
+        <Spotlight />
         <div className="wrap hero-content">
           <div className="avail fade-up d0">
             <span className="pulse" />
@@ -424,7 +445,7 @@ export default function Portfolio() {
           <h1>
             <span className="mask"><span>I build real-time</span></span>
             <span className="mask"><span>web &amp; mobile products</span></span>
-            <span className="mask"><span><span className="accent">that ship.</span></span></span>
+            <span className="mask"><span><FlipWords className="accent" words={['that ship.', 'that scale.', 'that last.']} /></span></span>
           </h1>
           <p className="sub fade-up d1">
             Full-stack developer specializing in Node.js and Next.js. I&apos;ve delivered{' '}
@@ -432,9 +453,11 @@ export default function Portfolio() {
             <strong>App&nbsp;Store and Play&nbsp;Store</strong> — across telehealth, marketplaces, and AI tools.
           </p>
           <div className="cta-row fade-up d2">
-            <a className="btn btn-primary" href="#work">
-              View my work <span className="arrow">→</span>
-            </a>
+            <span className="aura">
+              <a className="btn btn-primary" href="#work">
+                View my work <span className="arrow">→</span>
+              </a>
+            </span>
             <a className="btn btn-ghost" href="#contact">Book a call</a>
           </div>
           <div className="socials fade-up d3">
@@ -463,6 +486,14 @@ export default function Portfolio() {
             <div className="n"><span className="suffix">&lt;</span><span className="count" data-to="24">0</span><span className="suffix">&nbsp;h</span></div>
             <div className="l">Reply time</div>
           </div>
+        </div>
+      </div>
+
+      <div className="marquee" aria-hidden="true">
+        <div className="marquee-track">
+          {[...techMarquee, ...techMarquee].map((t, i) => (
+            <span className="mq-item" key={i}>{t}</span>
+          ))}
         </div>
       </div>
 
@@ -596,6 +627,7 @@ export default function Portfolio() {
 
       <div id="contact" className="contact">
         <div className="aurora" />
+        <div className="beams" aria-hidden="true"><i /><i /><i /><i /></div>
         <div className="wrap contact-inner">
           <span className="eyebrow reveal">Contact</span>
           <h2 className="reveal" style={{ '--i': 1 } as React.CSSProperties}>Tell me about your project</h2>

@@ -85,6 +85,67 @@ a { color: inherit; text-decoration: none; }
   -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 20%, black 30%, transparent 75%);
 }
 
+/* ═══════════ hero spotlight (Aceternity) ═══════════ */
+.spotlight {
+  position: absolute; top: -42%; left: -12%; width: 140%; height: 175%;
+  pointer-events: none; z-index: 0; opacity: 0;
+  animation: spotlightIn 1.6s 0.35s var(--ease-out) forwards;
+}
+@keyframes spotlightIn {
+  from { opacity: 0; transform: translate(-6%, -12%) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ═══════════ moving-border aura (Aceternity) ═══════════ */
+@property --angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.aura { position: relative; display: inline-flex; border-radius: 100px; isolation: isolate; }
+.aura::before {
+  content: ""; position: absolute; inset: -3px; border-radius: 100px; z-index: -1;
+  background: conic-gradient(from var(--angle),
+    transparent 8%, rgba(125, 165, 255, 0.9) 18%, rgba(181, 140, 255, 0.85) 28%, transparent 40%);
+  animation: auraSpin 3.4s linear infinite;
+  filter: blur(7px);
+}
+@keyframes auraSpin { to { --angle: 360deg; } }
+
+/* ═══════════ tech marquee ═══════════ */
+.marquee {
+  overflow: hidden; padding: 30px 0 0; position: relative; z-index: 1;
+  mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
+}
+.marquee-track { display: flex; width: max-content; animation: marquee 30s linear infinite; }
+.mq-item {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--faint); white-space: nowrap; margin-right: 48px;
+  display: inline-flex; align-items: center;
+}
+.mq-item::after {
+  content: ""; width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(91, 141, 255, 0.5); margin-left: 48px;
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ═══════════ contact beams ═══════════ */
+.beams { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.beams i {
+  position: absolute; top: -20%; width: 1px; height: 46%;
+  background: linear-gradient(180deg, transparent, rgba(125, 165, 255, 0.55), transparent);
+  opacity: 0; animation: beamFall 7s linear infinite;
+}
+.beams i:nth-child(1) { left: 16%; animation-delay: 0s; }
+.beams i:nth-child(2) { left: 38%; animation-delay: 2.2s; height: 36%; }
+.beams i:nth-child(3) { left: 64%; animation-delay: 4.1s; }
+.beams i:nth-child(4) { left: 85%; animation-delay: 1.3s; height: 30%; }
+@keyframes beamFall {
+  0% { transform: translateY(0); opacity: 0; }
+  12% { opacity: 1; }
+  55% { opacity: 1; }
+  75% { transform: translateY(260%); opacity: 0; }
+  100% { transform: translateY(260%); opacity: 0; }
+}
+
 /* ═══════════ nav ═══════════ */
 .site-nav {
   position: fixed; top: 14px; left: 16px; right: 16px; z-index: 90;
@@ -159,7 +220,7 @@ a { color: inherit; text-decoration: none; }
 .mono { font-family: var(--font-geist-mono), ui-monospace, monospace; }
 
 /* ═══════════ hero + load choreography ═══════════ */
-.hero { position: relative; padding: 170px 0 110px; }
+.hero { position: relative; padding: 170px 0 110px; overflow: hidden; }
 .hero-content { position: relative; z-index: 1; }
 .avail {
   display: inline-flex; align-items: center; gap: 9px; margin-bottom: 30px;
@@ -270,7 +331,17 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 -24px 60px -30px rgba(0, 0, 0, 0.85), var(--glass-hi);
   transform-origin: 50% 0;
   will-change: transform, filter;
+  position: relative;
 }
+/* mouse-tracking spotlight (Aceternity card-spotlight) */
+.case-card::after, .step::after, .contact-form::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(440px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(91, 141, 255, 0.12), transparent 65%);
+  opacity: 0; transition: opacity 0.35s ease;
+}
+.case-card:hover::after, .step:hover::after, .contact-form:hover::after { opacity: 1; }
+.contact-form { position: relative; }
 .case-card::before {
   counter-increment: case;
   content: "0" counter(case) " — 05";
